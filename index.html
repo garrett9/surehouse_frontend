@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app="surehouse-app">
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/app.css">
+<link rel="stylesheet" type="text/css" href="css/loading-bar.min.css">
+<link rel="stylesheet" type="text/css" href="css/animate.css">
+<link rel="stylesheet" href="css/ladda-themeless.min.css">
+<style type="text/css">
+header {
+	margin-top: 150px;
+}
+
+p#info {
+	color: #02c1f5;
+}
+
+.panel {
+    z-index: 1
+}
+nav {
+    z-index: 2
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div id="under" ng-if="showMenu" class="row">
+			<div ng-include="'app/templates/menu/menu.html'" class="row"></div>
+		</div>
+		<div id="over" ng-show="noToken || authenticated" class="animated" ng-class="{'hinge':fatal_error}" ng-view></div>
+	</div>
+
+	<div id="footer" class="row footer">
+		<p class="animated fadeInRight text-center"">SURE HOUSE
+			Dashboard | Copyright &copy; 2014</p>
+	</div>
+	
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/angular.min.js"></script>
+	<script src="js/angular-route.min.js"></script>
+	<script src="js/ngStorage.min.js"></script>
+	<script src="js/loading-bar.min.js"></script>
+	<script src="js/checklist-model.js"></script>
+	<script src="js/spin.min.js"></script>
+	<script src="js/ladda.min.js"></script>
+	<script src="js/angular-ladda.min.js"></script>
+	
+	<script src="app/app.js"></script>
+	<script src="app/services/User.js"></script>
+	<script src="app/services/Gateway.js"></script>
+	<script src="app/services/Sensor.js"></script>
+	<script src="app/services/Alert.js"></script>
+	<script src="app/services/API.js"></script>
+	<script src="app/services/AlertSubscription.js"></script>
+	
+	<script src="app/controllers/UsersController.js"></script>
+	<script src="app/controllers/HomeController.js"></script>
+	<script src="app/controllers/GatewaysController.js"></script>
+	<script src="app/controllers/SensorsController.js"></script>
+	<script src="app/controllers/AlertsController.js"></script>
+	<script src="app/controllers/ErrorController.js"></script>
+	<script src="app/controllers/AlertSubscriptionsController.js"></script>
+	
+</body>
+</html>

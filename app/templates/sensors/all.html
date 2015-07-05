@@ -1,0 +1,56 @@
+<link rel="stylesheet" type="text/css" href="./css/table-filter.min.css">
+<div class="row animated fadeInLeft">
+	<span ng-if="authenticated"><span ng-init="all()"></span></span>
+	<div class="animated fadeIn row alert alert-info text-center"
+		role="alert" ng-show="message">
+		<button class="close" data-dismiss="alert">&times;</button>
+		<strong>{{ message }}</strong>
+	</div>
+	<div class="animated fadeIn row alert alert-success text-center"
+		role="alert" ng-show="success">
+		<button class="close" data-dismiss="alert">&times;</button>
+		<strong>{{ success }}</strong> <span
+			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+	</div>
+	<div class="animated fadeIn row alert alert-danger text-center"
+		role="alert" ng-show="error">
+		<button class="close" data-dismiss="alert">&times;</button>
+		<strong>{{ error }}</strong> <span
+			class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+	</div>
+	<div class="row panel panel-primary filterable">
+		<div class="panel-heading">
+			<h3 class="panel-title">Manage Sensors <span ng-if="users.length != 0" class="badge">{{users.length}}</span></h3>
+			<div class="pull-right">
+				<button class="btn btn-default btn-xs btn-filter">
+					<span class="glyphicon glyphicon-filter"></span> Filter
+				</button>
+				<a href="#/Sensors/Create" class="btn btn-success btn-xs">
+					<span class="glyphicon glyphicon-plus"></span> Create Sensor
+				</a>
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+				<tr class="filters">
+					<th><input type="text" class="form-control"
+						placeholder="Name" disabled></th>
+					<th><input type="text" class="form-control"
+						placeholder="Display Name" disabled></th>
+					<th><input type="text" class="form-control"
+						placeholder="Gateway" disabled></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="animated fadeIn" data-ng-repeat="s in sensors" ng-class="{'fadeOut': s.id == deleted}">
+					<td><span ng-if="s.id == new" class="label label-default">New</span> <a href="#/Sensors/Edit/{{s.id}}">{{s.name}}</a></td>
+					<td>{{s.display_name}}</td>
+					<td>{{s.gateway}}</td>
+					<td><button class="btn btn-xs btn-danger" ng-click="delete(s.id, $index)">Delete</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script src="./js/table-filter.min.js"></script>

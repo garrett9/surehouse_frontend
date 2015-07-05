@@ -1,0 +1,68 @@
+<div class="form-group" ng-class="{'has-error':$parent.errors.gateway}"
+	ng-controller="GatewaysController">
+	<label class="col-xs-2 control-label">Gateway</label>
+	<div class="col-xs-6" ng-init="all()">
+		<select id="gateway" name="gateway" class="form-control"
+			ng-model="$parent.sensor.gateway" required>
+			<option value="" selected>Please select a Gateway</option>
+			<option ng-repeat="g in gateways" value="{{g.id}}">{{g.name}}</option>
+		</select>
+		<div class="help-block">
+			The gateway device this sensor routes its information through.<br>
+			<span ng-if="gateways && gateways.length == 0"><strong>There are currently
+					no gateways in the system. Click <a href="#/Gateways/Create" target="_blank">here</a>
+					to create a new one, and then refresh the drop down list.
+			</strong></span>
+			<ul>
+				<li ng-repeat="e in $parent.errors.gateway">{{e}}</li>
+			</ul>
+		</div>
+	</div>
+	<button type="button" class="btn btn-link" ng-click="all()">
+		<span class="glyphicon glyphicon-refresh"></span>
+	</button>
+</div>
+<div class="form-group" ng-class="{'has-error':errors.name}">
+	<label class="col-xs-2 control-label">Sensor Name</label>
+	<div class="col-xs-8">
+		<input id="name" name="name" type="text" placeholder="Sensor Name"
+			class="form-control input-xs" ng-model="sensor.name" required>
+		<div class="help-block">
+			The sensor's identical name that was configured within the gateway it
+			routes its data through. The value for this field is critical as it
+			allows the sensor's data to be correctly routed into the system.
+			<ul>
+				<li ng-repeat="e in errors.name">{{e}}</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="form-group" ng-class="{'has-error':errors.display_name}">
+	<label class="col-xs-2 control-label">Display Name</label>
+	<div class="col-xs-8">
+		<input id="display_name" name="display_name" type="text"
+			placeholder="Display Name" class="form-control input-xs"
+			ng-model="sensor.display_name" required>
+		<div class="help-block">
+			The unqiue name that will be used to display inside the web
+			application as opposed to displaying the previous field's value.
+			<ul>
+				<li ng-repeat="e in errors.display_name">{{e}}</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="form-group" ng-class="{'has-error':errors.units}">
+	<label class="col-xs-2 control-label">Units</label>
+	<div class="col-xs-8">
+		<input id="units" name="units" type="text" placeholder="Units"
+			class="form-control input-xs" ng-model="sensor.units" required>
+		<div class="help-block">
+			The unit type associated to this sensor's information. This field's
+			value holds no other significance other than for display purposes.
+			<ul>
+				<li ng-repeat="e in errors.units">{{e}}</li>
+			</ul>
+		</div>
+	</div>
+</div>

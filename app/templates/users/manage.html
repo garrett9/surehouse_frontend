@@ -1,0 +1,154 @@
+<div class="animated fadeInLeft" ng-show="loaded">
+	<div class="row col-md-12">
+		<div class="animated fadeIn alert alert-danger text-center"
+			role="alert" ng-show="manage_error">
+			<strong>{{ manage_error }}</strong>
+		</div>
+		<div class="animated fadeIn alert alert-success text-center"
+			role="alert" ng-show="manage_success" ng-click="manage_success=null">
+			<strong>{{ manage_success }}</strong>
+		</div>
+		<div class="panel panel-primary" ng-init="self()")>
+			<div class="panel-heading">Your Account</div>
+			<form class="form-horizontal" ng-submit="manage()">
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-xs-2 control-label">Username</label>
+						<div class="col-xs-8">
+							<input id="username" name="username" type="text"
+								ng-model="user.name" class="form-control input-xs" disabled>
+							<div class="help-block">Please contact us if you would like
+								to change your username.</div>
+						</div>
+					</div>
+					<div class="form-group"
+						ng-class="{'has-error':manage_errors.email}">
+						<label class="col-xs-2 control-label">Email</label>
+						<div class="col-xs-8">
+							<input id="email" name="email" type="email" placeholder="Email"
+								class="form-control input-xs" ng-model="user.email" required>
+							<div class="help-block">
+								We will use this address to send you password resets, and any
+								alert notifications you are subscribed to.
+								<ul>
+									<li ng-repeat="e in manage_errors.email">{{e}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="form-group text-center">
+						<button type="submit" class="btn btn-primary">
+							Save <img ng-show="loading" src="img/loading-wheel.gif">
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row col-md-12">
+		<div class="animated fadeIn alert alert-danger text-center"
+			role="alert" ng-show="password_error">
+			<strong>{{ password_error }}</strong>
+		</div>
+		<div class="animated fadeIn alert alert-success text-center"
+			role="alert" ng-show="password_success">
+			<strong>{{ password_success }}</strong>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">Password Reset</div>
+			<form class="form-horizontal" ng-submit="changePassword()">
+				<div class="panel-body">
+					<div class="form-group"
+						ng-class="{'has-error':password_errors.old_password}">
+						<label class="col-xs-2 control-label">Old Password</label>
+						<div class="col-xs-8">
+							<input id="old_password" name="old_password" type="password"
+								placeholder="Old Password" class="form-control input-xs"
+								ng-model="user.old_password" required>
+							<div class="help-block">
+								Your old password.
+								<ul>
+									<li ng-repeat="e in password_errors.old_password">{{e}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="form-group"
+						ng-class="{'has-error':errors.new_password}">
+						<label class="col-xs-2 control-label">New Password</label>
+						<div class="col-xs-8">
+							<input id="new_password" name="new_password" type="password"
+								placeholder="New Password" class="form-control input-xs"
+								ng-model="user.new_password" required>
+							<div class="help-block">
+								Your new password.
+								<ul ng-if="errors.new_password">
+									<li ng-repeat="e in errors.new_password">{{e}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="form-group"
+						ng-class="{'has-error':errors.confirm_password}">
+						<label class="col-xs-2 control-label">Confirm Password</label>
+						<div class="col-xs-8">
+							<input id="confirm_password" name="confirm_password"
+								type="password" placeholder="Confirm Password"
+								class="form-control input-xs" ng-model="user.confirm_password"
+								required>
+							<div class="help-block">
+								Confirm your new password.
+								<ul>
+									<li ng-repeat="e in errors.confirm_password">{{e}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="form-group text-center">
+						<button type="submit" class="btn btn-primary">
+							Save <img ng-show="loading" src="img/loading-wheel.gif">
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row col-md-12" ng-controller="AlertSubscriptionsController">
+		<div class="animated fadeIn alert alert-success text-center"
+			role="alert" ng-show="subscription_success">
+			<strong>{{ subscription_success }}</strong>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">My Alert Subscriptions</div>
+			<form class="form-horizontal" ng-init="all()"
+				ng-submit="subscribeToMultiple()">
+				<div class="panel-body">
+					<div ng-if="subscriptions.length > 0">
+						<table class="table">
+							<thead>
+								<th>Alert</th>
+								<th>Subscribed</th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="s in subscriptions">
+									<td>{{s.name}}</td>
+									<td><input type="checkbox" name="checked[]"
+										checklist-model="checked" checklist-value="s.id"
+										ng-checked="s.subscribed==true"></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="form-group text-center">
+							<button type="submit" class="btn btn-primary">
+								Save <img ng-show="loading" src="img/loading-wheel.gif">
+							</button>
+						</div>
+					</div>
+					<div ng-if="!subscriptions || subscriptions.length == 0"></div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="row"></div>
+</div>
