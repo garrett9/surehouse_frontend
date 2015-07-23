@@ -1,7 +1,7 @@
 /**
  * The User model.
  */
-app.factory('User', function($http, API) {
+app.factory('User', function(API) {
 	
 	return {
 		/**

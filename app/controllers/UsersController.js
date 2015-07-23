@@ -171,11 +171,14 @@ app.controller('UsersController', function($rootScope, $scope, $location, $local
 	 * Change the current user's settings.
 	 */
 	$scope.manage = function() {
+		$scope.loading = true;
 		User.manage($scope.user, function(res) {
+			$scope.loading = false;
 			$scope.manage_error = null;
 			$scope.manage_errors = null;
 			$scope.manage_success = 'Successfully saved your changes.';
 		}, function(res) {
+			$scope.loading = false;
 			$scope.manage_success = null;
 			$scope.manage_error = 'Failed to save your changes!';
 			$scope.manage_errors = res.payload;

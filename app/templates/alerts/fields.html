@@ -1,44 +1,44 @@
-<div class="form-group" ng-class="{'has-error':errors.name}">
+<div class="form-group" data-ng-class="{'has-error':errors.name}">
 	<label class="col-xs-2 control-label">Name</label>
 	<div class="col-xs-8">
 		<input id="name" name="name" type="text" placeholder="Alert Name"
-			class="form-control" ng-model="alert.name" required>
+			class="form-control" data-ng-model="alert.name" required>
 		<div class="help-block">
 			The alert's unique name to display within the web application.
 			<ul>
-				<li ng-repeat="e in errors.name">{{e}}</li>
+				<li data-ng-repeat="e in errors.name">{{e}}</li>
 			</ul>
 		</div>
 	</div>
 </div>
-<div class="form-group" ng-class="{'has-error':errors.sensor}" ng-controller="SensorsController" ng-init="all()">
+<div class="form-group" data-ng-class="{'has-error':errors.sensor}" data-ng-controller="SensorsController" data-ng-init="all()">
 	<label class="col-xs-2 control-label">Sensor</label>
 	<div class="col-xs-6">
 		<select id="sensor" name="sensor" class="form-control"
-			ng-model="$parent.alert.sensor" required>
+			data-ng-model="$parent.alert.sensor" required>
 			<option value="" selected>Please select a Sensor</option>
-			<option ng-repeat="s in sensors" value="{{s.id}}">{{s.name}}</option>
+			<option data-ng-repeat="s in sensors" value="{{s.id}}">{{s.name}}</option>
 		</select>
 		<div class="help-block">
 			The sensor that the alert will be monitoring.<br>
-			<span ng-if="sensors.length == 0"><strong>There are currently
+			<span data-ng-if="sensors.length == 0"><strong>There are currently
 					no sensors in the system. Click <a href="#/Sensors/Create" target="_blank">here</a>
 					to create a new one, and then refresh the drop down list.
 			</strong></span>
 			<ul>
-				<li ng-repeat="e in errors.sensor">{{e}}</li>
+				<li data-ng-repeat="e in errors.sensor">{{e}}</li>
 			</ul>
 		</div>
 	</div>
-	<button type="button" class="btn btn-link" ng-click="all()">
+	<button type="button" class="btn btn-link" data-ng-click="all()">
 		<span class="glyphicon glyphicon-refresh"></span>
 	</button>
 </div>
-<div class="form-group" ng-class="{'has-error':errors.operation}">
+<div class="form-group" data-ng-class="{'has-error':errors.operation}">
 	<label class="col-xs-2 control-label">Operation</label>
 	<div class="col-xs-6">
 		<select id="operation" name="operation" class="form-control"
-			ng-model="alert.operation" required>
+			data-ng-model="alert.operation" required>
 			<option value="<" selected>{{operationText('<')}}</option>
 			<option value=">">{{operationText('>')}}</option>
 			<option value="<=">{{operationText('<=')}}</option>
@@ -48,37 +48,37 @@
 			The operation used to compare the selected sensor's value against
 			your specified value. {{o.operation}}
 			<ul>
-				<li ng-repeat="e in errors.operation">{{e}}</li>
+				<li data-ng-repeat="e in errors.operation">{{e}}</li>
 			</ul>
 		</div>
 	</div>
 </div>
-<div class="form-group" ng-class="{'has-error':errors.value}">
+<div class="form-group" data-ng-class="{'has-error':errors.value}">
 	<label class="col-xs-2 control-label">Value</label>
 	<div class="col-xs-6">
 		<input id="value" name="value" type="number" placeholder="Value"
-			class="form-control" ng-model="alert.value" required>
+			class="form-control" data-ng-model="alert.value" required>
 		<div class="help-block">
 			If the condition of comparing the selected sensor's value against
 			this value using the specified operation is met, then this alert will
 			be triggered.
 			<ul>
-				<li ng-repeat="e in errors.value">{{e}}</li>
+				<li data-ng-repeat="e in errors.value">{{e}}</li>
 			</ul>
 		</div>
 	</div>
 </div>
-<div class="form-group" ng-class="{'has-error':errors.timespan}">
+<div class="form-group" data-ng-class="{'has-error':errors.timespan}">
 	<label class="col-xs-2 control-label">Timespan (in Minutes)</label>
 	<div class="col-xs-6">
 		<input id="value" name="value" type="number" placeholder="Timespan"
-			class="form-control" ng-model="alert.timespan" required>
+			class="form-control" data-ng-model="alert.timespan" required>
 		<div class="help-block">
 			If the condition of comparing the selected sensor's value against the
 			previoulsy entered value using the specified operation is met for the
 			provided number of minutes, then this alert will be triggered.
 			<ul>
-				<li ng-repeat="e in errors.timespan">{{e}}</li>
+				<li data-ng-repeat="e in errors.timespan">{{e}}</li>
 			</ul>
 		</div>
 	</div>

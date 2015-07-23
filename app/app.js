@@ -1,13 +1,4 @@
-var app = angular.module('surehouse-app', ['angular-ladda', 'checklist-model', 'ngRoute', 'ngStorage', 'angular-loading-bar']);
-
-/**
- * Apply constants for the web app's domain, and the REST API domain.
- */
-app.constant('URLS', {
-	BASE: 'http://155.246.239.239',
-	API: 'https://155.246.239.239'
-});
-
+var app = angular.module('surehouse-app', ['tableSort', 'angular-ladda', 'checklist-model', 'ngRoute', 'ngStorage', 'angular-loading-bar', 'ngSanitize', 'ngCsv']);
 
 app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 	/**
@@ -119,6 +110,22 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 		})
 		
 		/**
+		 * Query Routes
+		 */
+		.when('/Query', {
+			templateUrl: 'app/templates/query/query.html',
+			controller: 'QueryController'
+		})
+		.when('/Query/Custom', {
+			templateUrl: 'app/templates/query/custom.html',
+			controller: 'QueryController'
+		})
+		.when('/Query/Recent', {
+			templateUrl: 'app/templates/query/custom.html',
+			controller: 'QueryController'
+		})
+		
+		/**
 		 * If all other routes haven't been met.
 		 */
 		.otherwise({
@@ -206,7 +213,8 @@ app.run(function($localStorage, $rootScope, $location, $http, URLS) {
 			$rootScope.authenticated = false;
 			delete $localStorage.token;
 
-			$location.path('/');
+			if(!$location.path().contains('/Query'))
+				$location.path('/');
 		});
 	}
 	

@@ -1,5 +1,5 @@
 <div
-	ng-class="{'fadeInLeft':!authenticated, 'fadeOutRight':authenticated}"
+	data-ng-class="{'fadeInLeft':!authenticated, 'fadeOutRight':authenticated}"
 	class="animated">
 	<header id="header" class="row">
 		<div class="text-center">
@@ -14,40 +14,40 @@
 	<div>
 		<div
 			class="animated fadeIn row alert alert-success text-center col-xs-4 col-xs-offset-4"
-			role="alert" ng-show="success">
+			role="alert" data-ng-show="success">
 			<strong>{{ success }}</strong> <span
 				class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
 		</div>
-		<div ng-class="{'fadeIn':error, 'fadeOutRight':!error}"
+		<div data-ng-class="{'fadeIn':error, 'fadeOutRight':!error}"
 			class="animated alert alert-danger text-center col-xs-4 col-xs-offset-4"
-			role="alert" ng-show="error">
+			role="alert" data-ng-show="error">
 			<strong>{{ error }}</strong> <span
 				class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
 		</div>
 
-		<form ng-class="{'fadeOutRight':success}" class="animated row form-horizontal"
-			ng-submit="login()">
+		<form data-ng-class="{'fadeOutRight':success}" class="animated row form-horizontal"
+			data-ng-submit="login()">
 			<fieldset class="row col-xs-4 col-xs-offset-4 text-center">
 				<legend>Please Login</legend>
 				<div class="form-group">
-					<input ng-model="user.name" id="username" type="text"
+					<input data-ng-model="user.name" id="username" type="text"
 						name="username" placeholder="Username" class="form-control"
-						ng-disabled="authenticating" required/>
+						data-ng-disabled="authenticating" required/>
 				</div>
 				<div class="form-group text-center">
-					<input ng-model="user.password" id="password" type="password"
+					<input data-ng-model="user.password" id="password" type="password"
 						name="password" placeholder="Password" class="form-control"
-						ng-disabled="authenticating" required/>
+						data-ng-disabled="authenticating" required/>
 				</div>
 				<div class="form-group text-center">
 					<button type="submit" class="btn btn-primary"
-						ng-disabled="authenticating" ladda="authenticating">
+						data-ng-disabled="authenticating" data-ladda="authenticating">
 						Login
 					</button>
 				</div>
 				<div class="form-group text-center">
 					<a href="" data-toggle="modal" data-target="#sendPasswordReset"
-						ng-disabled="authenticating">Forgot Password</a>
+						data-ng-disabled="authenticating">Forgot Password</a>
 				</div>
 			</fieldset>
 		</form>
@@ -55,7 +55,7 @@
 </div>
 <div class="modal fade" id="sendPasswordReset" tabindex="-1"
 	role="dialog" aria-labelledby="sendPasswordReset" aria-hidden="true">
-	<form class="row form-horizontal" ng-submit="sendPasswordReset()">
+	<form class="row form-horizontal" data-ng-submit="sendPasswordReset()">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -68,24 +68,24 @@
 				<div class="modal-body">
 					<div
 						class="animated fadeIn alert alert-success text-center"
-						role="alert" ng-show="reset_success">
+						role="alert" data-ng-show="reset_success">
 						<strong>{{ reset_success }}</strong> <span
 							class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
 					</div>
-					<div ng-class="{'fadeIn':error, 'fadeOutRight':!reset_error}"
+					<div data-ng-class="{'fadeIn':error, 'fadeOutRight':!reset_error}"
 						class="animated alert alert-danger text-center"
-						role="alert" ng-show="reset_error">
+						role="alert" data-ng-show="reset_error">
 						<strong>{{ reset_error }}</strong> <span
 							class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
 					</div>
 					<div class="text-center">
 						<input type="text" id="email" name="email" type="email"
-							class="form-control"ng-model="user.email" placeholder="Email Address" ng-disabled="loading" required>
+							class="form-control" data-ng-model="user.email" placeholder="Email Address" data-ng-disabled="loading" required>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" ng-disabled="loading"  ng-click="reset_success = null; reset_error = null; user.email = ''" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary" ng-disabled="loading"  ladda="loading">Send Reset</button>
+					<button type="button" class="btn btn-default" data-ng-disabled="loading" data-ng-click="reset_success = null; reset_error = null; user.email = ''" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary" data-ng-disabled="loading" data-ladda="loading">Send Reset</button>
 				</div>
 			</div>
 			<!-- /.modal-content -->

@@ -1,47 +1,47 @@
-<div class="form-group" ng-class="{'has-error':errors.name}">
+<div class="form-group" data-ng-class="{'has-error':errors.name}">
 	<label class="col-xs-2 control-label">Name</label>
 	<div class="col-xs-6">
 		<input id="name" name="name" type="text" placeholder="Gateway Name"
-			class="form-control input-xs" ng-model="gateway.name" required>
+			class="form-control input-xs" data-ng-model="gateway.name" required>
 		<div class="help-block">
 			The gateway's unique name to display in the web application.
 			<ul>
-				<li ng-repeat="e in errors.name">{{e}}</li>
+				<li data-ng-repeat="e in errors.name">{{e}}</li>
 			</ul>
 		</div>
 	</div>
 </div>
-<div class="form-group" ng-class="{'has-error':errors.IP}">
+<div class="form-group" data-ng-class="{'has-error':errors.IP}">
 	<label class="col-xs-2 control-label">IP Address</label>
 	<div class="col-xs-6">
 		<input id="IP" name="IP" type="text" placeholder="IP Address"
-			class="form-control input-xs" ng-model="gateway.IP" required>
+			class="form-control input-xs" data-ng-model="gateway.IP" required>
 		<div class="help-block">
 			The IP address the gateway is listening on.
 			<ul>
-				<li ng-repeat="e in errors.IP">{{e}}</li>
+				<li data-ng-repeat="e in errors.IP">{{e}}</li>
 			</ul>
 		</div>
 	</div>
 </div>
-<div class="form-group" ng-class="{'has-error':errors.port}">
+<div class="form-group" data-ng-class="{'has-error':errors.port}">
 	<label class="col-xs-2 control-label">Port Number</label>
 	<div class="col-xs-4">
 		<input id="port" name="port" type="number" placeholder="Port Number"
-			class="form-control input-xs" ng-model="gateway.port" required>
+			class="form-control input-xs" data-ng-model="gateway.port" required>
 		<div class="help-block">
 			The port number the gateway is listening on.
 			<ul>
-				<li ng-repeat="e in errors.port">{{e}}</li>
+				<li data-ng-repeat="e in errors.port">{{e}}</li>
 			</ul>
 		</div>
 	</div>
 </div>
-<div class="form-group" ng-class="{'has-error':errors.type}">
+<div class="form-group" data-ng-class="{'has-error':errors.type}">
 	<label class="col-xs-2 control-label">Type</label>
 	<div class="col-xs-4">
 		<select id="type" name="type" class="form-control"
-			ng-model="gateway.type" required>
+			data-ng-model="gateway.type" required>
 			<option value="eGuage" selected>eGuage</option>
 			<option value="WEL">WEL</option>
 		</select>
@@ -50,7 +50,7 @@
 			critical as it is used in determining how sensor information is
 			routed into the system.
 			<ul>
-				<li ng-repeat="e in errors.type">{{e}}</li>
+				<li data-ng-repeat="e in errors.type">{{e}}</li>
 			</ul>
 		</div>
 	</div>

@@ -1,7 +1,7 @@
 /**
  * The User model.
  */
-app.factory('Sensor', function($http, API) {
+app.factory('Sensor', function(API) {
 	return {
 		/**
 		 * Initialize an empty user instance.

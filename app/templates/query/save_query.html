@@ -1,0 +1,49 @@
+<div class="modal fade" id="save_query">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Save Query</h4>
+			</div>
+			<div class="modal-body">
+				<div id="error" class="animated fadeIn alert alert-danger text-center"
+					role="alert" data-ng-show="save_query_error">
+					<strong>{{ $parent.save_query_message }}</strong>
+				</div>
+				<div id="error" class="animated fadeIn alert alert-success text-center"
+					role="alert" data-ng-show="save_query_success">
+					<strong>{{ $parent.save_query_message }}</strong>
+				</div>
+				<div class="row form-group">
+					<label class="col-sm-2">Query Name</label>
+					<div class="col-sm-4">
+						<input id="name" name="name" class="form-control" data-ng-model="$parent.name" required>
+					</div>
+					<span class="help-block col-sm-6">This name will be displayed for
+						later selection.</span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="close_save_query" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-success"
+					data-ng-click="saveQuery(params)">Save</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- On click, this button will clear from the scope the messages related to saving queries. -->
+<button class="hidden" id="clearMessages" data-ng-click="clearMessages()"></button>
+
+<!-- On close, clear all messages related to saving the query. -->
+<script>
+$('#save_query').on('hidden.bs.modal', function (e) {
+	 $('#clearMessages').click();
+})
+</script>

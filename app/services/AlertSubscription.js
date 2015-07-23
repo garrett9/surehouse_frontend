@@ -1,7 +1,7 @@
 /**
  * The AlertSubscription model.
  */
-app.factory('AlertSubscription', function($http, API) {
+app.factory('AlertSubscription', function(API) {
 	return {
 		/**
 		 * Initialize a subscription.

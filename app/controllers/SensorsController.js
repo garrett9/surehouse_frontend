@@ -6,6 +6,7 @@ app.controller('SensorsController', function($scope, $location, $timeout, $route
 	 * The Sensor.
 	 */
 	$scope.sensor = Sensor.init();
+	$scope.loaded = false;
 	
 	/**
 	 * Get all sensors in the system.
@@ -14,6 +15,7 @@ app.controller('SensorsController', function($scope, $location, $timeout, $route
 		$scope.new = $routeParams.new;
 		$scope.error = $routeParams.error;
 		Sensor.all(function(res, status) {
+			$scope.loaded = true;
 			if(status == 200)
 				$scope.sensors = res.payload;
 			else {
@@ -21,6 +23,7 @@ app.controller('SensorsController', function($scope, $location, $timeout, $route
 				$scope.message = 'There are currently no sensors in the system.';
 			}
 		}, function(res) {
+			$scope.loading = true;
 			$scope.error = 'You are not allowed to access this content!';
 		});
 	}

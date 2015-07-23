@@ -1,0 +1,37 @@
+<!-- Section for displaying the results -->
+<div class="animated fadeInLeft" data-ng-init="results()">
+	<p class="row pull-right">
+		<button class="btn btn-default" data-ng-click="newQuery()">New Query</button>
+		<button type="button" class="btn btn-success" data-toggle="modal"
+			data-target="#save_query">Save Query</button>
+		<button type="button" class="btn btn-primary" data-ng-csv="payload"
+			data-csv-header="headers" data-filename="query_results.csv">Export
+			to CSV</button>
+	</p>
+	<div class="row" data-ng-if="!loading">
+		<table id="results" class="table table-striped table-bordered"
+			ts-wrapper>
+			<thead>
+				<tr>
+					<th class="tablesort-sortable" data-ts-criteria="Time"
+						data-ng-if="params.aggregate > 0">Time</th>
+					<th class="tablesort-sortable"
+						data-ts-criteria="{{ key }}|parseInt"
+						data-ng-repeat="(key, value) in payload[0]"
+						data-ng-if="key != 'Time'">{{ key }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ts-repeat data-ng-repeat="p in payload">
+					<td data-ng-if="params.aggregate > 0">{{ p['Time'] }}</td>
+					<td
+						data-ng-repeat="(key, value) in p | orderBy:sortType:sortReverse"
+						data-ng-if="key != 'Time'">{{ value }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!-- A Modal for saving the current query. -->
+<div data-ng-include="'app/templates/query/save_query.html'"></div>

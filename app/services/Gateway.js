@@ -1,7 +1,7 @@
 /**
  * The User model.
  */
-app.factory('Gateway', function($http, API) {
+app.factory('Gateway', function(API) {
 	return {
 		/**
 		 * Initialize an empty user instance.

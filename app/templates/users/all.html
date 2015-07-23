@@ -1,26 +1,26 @@
 <link rel="stylesheet" type="text/css" href="./css/table-filter.min.css">
 <div class="row animated fadeInLeft">
-	<span ng-if="authenticated"><span ng-init="all()"></span></span>
+	<span data-ng-if="authenticated"><span data-ng-init="all()"></span></span>
 	<div class="animated fadeIn row alert alert-info text-center"
-		role="alert" ng-show="message">
+		role="alert" data-ng-show="message">
 		<button class="close" data-dismiss="alert">&times;</button>
 		<strong>{{ message }}</strong>
 	</div>
 	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" ng-show="success">
+		role="alert" data-ng-show="success">
 		<button class="close" data-dismiss="alert">&times;</button>
 		<strong>{{ success }}</strong> <span
 			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
 	</div>
 	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" ng-show="error">
+		role="alert" data-ng-show="error">
 		<button class="close" data-dismiss="alert">&times;</button>
 		<strong>{{ error }}</strong> <span
 			class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
 	</div>
 	<div class="row panel panel-primary filterable">
 		<div class="panel-heading">
-			<h3 class="panel-title">Manage Users <span ng-if="users.length != 0" class="badge">{{users.length}}</span></h3>
+			<h3 class="panel-title">Manage Users <span data-ng-if="users.length != 0" class="badge">{{users.length}}</span></h3>
 			<div class="pull-right">
 				<button class="btn btn-default btn-xs btn-filter">
 					<span class="glyphicon glyphicon-filter"></span> Filter
@@ -43,11 +43,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="animated fadeIn" data-ng-repeat="u in users" ng-class="{'fadeOut': u.id == deleted}">
-					<td><span ng-if="u.id == new" class="label label-default">New</span> <a href="#/Users/Edit/{{u.id}}">{{u.name}}</a></td>
+				<tr class="animated fadeIn" data-ng--repeat="u in users" data-ng-class="{'fadeOut': u.id == deleted}">
+					<td><span data-ng-if="u.id == new" class="label label-default">New</span> <a href="#/Users/Edit/{{u.id}}">{{u.name}}</a></td>
 					<td>{{u.email}}</td>
 					<td>{{u.permission}}</td>
-					<td><button class="btn btn-xs btn-danger" ng-click="delete(u.id, $index)">Delete</button></td>
+					<td><button class="btn btn-xs btn-danger" data-ng-click="delete(u.id, $index)">Delete</button></td>
 				</tr>
 			</tbody>
 		</table>
