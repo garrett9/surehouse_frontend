@@ -14,9 +14,7 @@ app.factory('Query', function(API) {
 			};
 		},
 		
-		/**
-		 * Given a JS object, this function converts it to a URL encoded query string.
-		 */
+		// Given a JS object, this function converts it to a URL encoded query string.
 		serializeParams: function(object, isCustom, prefix) {
 			/*
 			 * Depending on the type of query being performed, we must exclude
@@ -41,23 +39,17 @@ app.factory('Query', function(API) {
 			return str.join("&");
 		},
 		
-		/**
-		 * Performs a custom query with the back end data feeds of the SureHouse application.
-		 */
+		// Performs a custom query with the back end data feeds of the SureHouse application.
 		custom: function(data, success, error) {
 			API.GET('/Reporting/Custom?' + this.serializeParams(data, true), success, error);
 		},
 		
-		/**
-		 * Performs a "most recent" query with the back end feeds of the SureHouse application.
-		 */
+		// Performs a "most recent" query with the back end feeds of the SureHouse application.
 		recent: function(data, success, error) {
 			API.GET('/Reporting/Recent?' + this.serializeParams(data, false), success, error);
 		},
 		
-		/**
-		 * Handles a query by specifying what type of query it is.
-		 */
+		// Handles a query by specifying what type of query it is.
 		query: function(data, isCustom, success, error) {
 			if(isCustom)
 				this.custom(data, success, error);

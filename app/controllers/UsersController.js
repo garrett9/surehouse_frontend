@@ -2,63 +2,44 @@
  * The UsersController handles anything dealing with users, such as creating, editing, or deleting them.
  */
 app.controller('UsersController', function($rootScope, $scope, $location, $localStorage, $timeout, $routeParams, User) {
-	/**
-	 * The User Model.
-	 */
-	$scope.user = User.init();
-
-	/**
+	
+	/*
 	 * Attempt to log the user into the system based on the provided credentials.
 	 * If successfull, the client will be directed to the home dashboard. On 
 	 * failure, the client will be asked for credentials again.
 	 */
 	$scope.login = function() {
-		$scope.authenticating = true;
 		User.login($scope.user, function(res) {
-			$scope.user = User.init();
-
-			$scope.error = null;
-			$scope.success = 'Welcome!';
-			$scope.authenticating = false;
-			console.log(res);
+			delete $scope.user;
 			$localStorage.token = res.payload.auth_token;
-
 			$timeout(function(){
-				$rootScope.showMenu = true;
 				$rootScope.authenticated = true;
 				$timeout(function() {
 					$location.path('Home');
 				}, 1000);
 			}, 1500);
 		}, function(res) {
-			$scope.user.password = "";
-			$scope.success = null;
-			$scope.error = (res != null) ? res.message : 'The server is not currently responding!';
-			$scope.authenticating = false;
+			delete $scope.user.password;
 		});
 	};
 
-	/**
+	/*
 	 * The logout function simply deletes the security token on the client's machine,
 	 * and redirects them to the login page.
 	 */
 	$scope.logout = function() {
-		$rootScope.user = null;
 		delete $localStorage.token;
-		$rootScope.noToken = true;
 		$timeout(function() {
-			$scope.fade = true;
-			$rootScope.authenticated = false;
+			$rootScope.fade = true;
 			$timeout(function() {
-				$rootScope.showMenu = false;
+				$rootScope.authenticated = false;
 				$location.path('/');
+				$rootScope.fade = false;
 			}, 1000);
 		}, 1000);
 	};
 
-	/**
-	 * Issue a request for a password reset.
-	 */
+	// Issue a request for a password reset.
 	$scope.sendPasswordReset = function() {
 		$scope.loading = true;
 		User.sendPasswordReset({'email': $scope.user.email}, function(res) {
@@ -75,9 +56,7 @@ app.controller('UsersController', function($rootScope, $scope, $location, $local
 		});
 	}
 
-	/**
-	 * Send a password reset.
-	 */
+	// Send a password reset.	
 	$scope.resetPassword = function() {
 		$scope.loading = true;
 		User.passwordReset($routeParams.token, {'email': $scope.user.email, 'password': $scope.user.password, 'password_confirmation': $scope.user.password_confirmation}, function(res) {
@@ -101,75 +80,42 @@ app.controller('UsersController', function($rootScope, $scope, $location, $local
 		});
 	}
 
-	/**
-	 * Get all users in the system.
-	 */
+	// Get all users in the system.
 	$scope.all = function() {
-		$scope.new = $routeParams.new;
-		$scope.error = $routeParams.error;
+		$scope.n = $routeParams.n;
 		User.all(function(res, status) {
-			if(status == 200)
-				$scope.users = res.payload;
-			else {
-				$scope.users = [];
-				$scope.message = 'There are currently no users in the system.';
-			}
+			$scope.users = res.payload;
 		});
 	}
 
-	/**
-	 * Create a user.
-	 */
+	// Create a user.
 	$scope.create = function() {
-		$scope.loading = true;
 		User.create($scope.user, function(res, status) {
-			$scope.user = User.init();
-			$scope.error = null;
-			$scope.loading = false;
-			$scope.success = 'Successfully created the user.';
+			delete $scope.user;
 			$timeout(function() {
-				$scope.fade = true;
 				$timeout(function() {
-					$location.path('/Users').search({new: res.payload.id});
+					$location.path('/Users').search({n: res.payload.id});
 				}, 1000);
 			}, 1500);
-		}, function(res) {
-			if(res != null && res.status == 400) {
-				$scope.loading = false;
-				$scope.error = 'Could not create the user. Please fix the errors in the form.';
-				$scope.errors = res.payload;
-			}
 		});
 	}
 
-	/**
-	 * Get a user.
-	 */
+	// Get a user.
 	$scope.get = function() {
 		User.get($routeParams.id, function(res) {
-			$scope.user = User.init();
-			$scope.user.name = res.payload.name;
-			$scope.user.email = res.payload.email;
-			$scope.user.permission = res.payload.permission;
+			$scope.user = res.payload;
 			$scope.show = true;
 		});
 	}
 
-	/**
-	 * Get the current user.
-	 */
+	// Get the current user.
 	$scope.self = function() {
 		User.self(function(res) {
-			$scope.user = User.init();
-			$scope.user.name = res.payload.name;
-			$scope.user.email = res.payload.email;
-			$scope.loaded = true;
+			$scope.user = res.payload;
 		});
 	}
 
-	/**
-	 * Change the current user's settings.
-	 */
+	// Change the current user's settings.
 	$scope.manage = function() {
 		$scope.loading = true;
 		User.manage($scope.user, function(res) {
@@ -185,9 +131,7 @@ app.controller('UsersController', function($rootScope, $scope, $location, $local
 		});
 	}
 
-	/**
-	 * Change the current user's password.
-	 */
+	// Change the current user's password.
 	$scope.changePassword = function() {
 		User.changePassword($scope.user, function(res) {
 			$scope.password_error = null;
@@ -203,45 +147,20 @@ app.controller('UsersController', function($rootScope, $scope, $location, $local
 		});
 	}
 
-	/**
-	 * Save a user.
-	 */
+	// Save a user.
 	$scope.save = function() {
-		$scope.loading = true;
-		User.save($routeParams.id, $scope.user, function(res) {
-			$scope.loading = false;
-			$scope.error = null;
-			$scope.success = 'Successfully saved your changes.';
-			$scope.errors = null;
-		}, function(res, status) {
-			if(res != null && res.status == 400) {
-				$scope.loading = false;
-				$scope.success = null;
-				$scope.error = 'Could not save your changes! Please fix the errors in the form.';
-				$scope.errors = res.payload;
-			}
-		});
+		User.save($routeParams.id, $scope.user);
 	}
 
-	/**
-	 * Delete a user.
-	 */
-	$scope.delete = function(id, index) {
+	// Delete a user.
+	$scope.destroy = function(id, index) {
 		if(confirm('Are you sure you want to delete this user?')) {
-			$scope.loading = true;
-			User.delete(id, function(res, status) {
-				$scope.loading = false;
-				$scope.success = 'The user has been successfully deleted.';
+			User.destroy(id, function(res, status) {
+				$scope.message = 'The user has been successfully deleted.';
 				$scope.deleted = id;
 				$timeout(function() {
 					$scope.users.splice(index, 1);
 				}, 1000);
-			}, function(res, status) {
-				$scope.loading = false;
-				if(status == 404)
-					$scope.error = 'The user was not found!';
-				else
-					$scope.error = 'Failed to delete the user!';
 			});
 		}
 	}

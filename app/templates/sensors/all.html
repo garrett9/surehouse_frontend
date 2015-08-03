@@ -1,26 +1,20 @@
-<link rel="stylesheet" type="text/css" href="./css/table-filter.min.css">
-<div class="row animated fadeInLeft">
+<div class="container animated fadeInLeft">
 	<span data-ng-if="authenticated"><span data-ng-init="all()"></span></span>
-	<div class="animated fadeIn row alert alert-info text-center"
-		role="alert" data-ng-show="message">
-		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ message }}</strong>
-	</div>
 	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" data-ng-show="success">
+		role="alert" data-ng-show="status.delete_success">
 		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ success }}</strong> <span
+		<strong>Successfully deleted the sensor.</strong> <span
 			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
 	</div>
 	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" data-ng-show="error">
+		role="alert" data-ng-show="status.delete_error">
 		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ error }}</strong> <span
+		<strong>Failed to delete the sensor! Please contact support if this issue persists.</strong> <span
 			class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
 	</div>
 	<div class="row panel panel-primary filterable">
 		<div class="panel-heading">
-			<h3 class="panel-title">Manage Sensors <span data-ng-if="users.length != 0" class="badge">{{users.length}}</span></h3>
+			<h3 class="panel-title">Manage Sensors <span data-ng-if="sensors.length != 0" class="badge">{{sensors.length}}</span></h3>
 			<div class="pull-right">
 				<button class="btn btn-default btn-xs btn-filter">
 					<span class="glyphicon glyphicon-filter"></span> Filter
@@ -44,10 +38,10 @@
 			</thead>
 			<tbody>
 				<tr class="animated fadeIn" data-ng-repeat="s in sensors" data-ng-class="{'fadeOut': s.id == deleted}">
-					<td><span data-ng-if="s.id == new" class="label label-default">New</span> <a href="#/Sensors/Edit/{{s.id}}">{{s.name}}</a></td>
+					<td><span data-ng-if="s.id == n" class="label label-default">New</span> <a href="#/Sensors/Edit/{{s.id}}">{{s.name}}</a></td>
 					<td>{{s.display_name}}</td>
 					<td>{{s.gateway}}</td>
-					<td><button class="btn btn-xs btn-danger" data-ng-click="delete(s.id, $index)">Delete</button></td>
+					<td><button class="btn btn-xs btn-danger" data-ng-click="destroy(s.id, $index)">Delete</button></td>
 				</tr>
 			</tbody>
 		</table>

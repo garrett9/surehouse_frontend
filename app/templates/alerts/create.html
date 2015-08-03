@@ -1,16 +1,16 @@
-<div class="animated fadeInLeft">
+<div class="container animated fadeInLeft">
 	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" data-ng-show="success" data-ng-class="{'fadeOutRight':fade}">
-		<strong>{{ success }}</strong> <span
+		role="alert" data-ng-show="status.post_success">
+		<strong>Successfully created the user.</strong> <span
 			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
 	</div>
 	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" data-ng-show="error">
+		role="alert" data-ng-show="status.post_error">
 		<span
-			class="glyphicon glyphicon-alert" aria-hidden="true"></span> <strong>{{ error }}</strong>
+			class="glyphicon glyphicon-alert" aria-hidden="true"></span> <strong>Failed to create the user!</strong>
 	</div>
-	<form data-ng-class="{'fadeOutRight':success}"
-		class="animated row form-horizontal" data-ng-submit="create()">
+	<form
+		class="animated row form-horizontal" data-ng-class="{'fadeOutRight':status.post_success}" data-ng-submit="create()" data-errors="errors">
 		<fieldset data-ng-disabled="loading">
 			<legend class="text-center">Create a New Alert</legend>
 			<div id="field" data-ng-include="'app/templates/alerts/fields.html'"></div>

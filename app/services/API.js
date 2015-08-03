@@ -14,30 +14,22 @@ app.factory('API', function($http, URLS) {
 	}
 	
 	return {
-		/**
-		 * Perform a GET request.
-		 */
+		// Perform a GET request.
 		GET: function(path, success, error) {
 			process($http.get(URLS.API + path), success, error);
 		},
 		
-		/**
-		 * Perform a POST request.
-		 */
+		// Perform a POST request.
 		POST: function(path, data, success, error) {
 			process($http.post(URLS.API + path, data), success, error);
 		},
 		
-		/**
-		 * Perform a PUT request.
-		 */
+		// Perform a PUT request.
 		PUT: function(path, data, success, error) {
 			process($http.put(URLS.API + path, data), success, error);
 		},
 		
-		/**
-		 * Perform a DELETE request.
-		 */
+		// Perform a DELETE request.
 		DELETE: function(path, success, error) {
 			process($http.delete(URLS.API + path), success, error);
 		}

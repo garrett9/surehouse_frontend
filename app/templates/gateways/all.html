@@ -1,26 +1,19 @@
-<link rel="stylesheet" type="text/css" href="./css/table-filter.min.css">
-<div class="row animated fadeInLeft">
+<div class="container animated fadeInLeft">
 	<span data-ng-if="authenticated"><span data-ng-init="all()"></span></span>
-	<div class="animated fadeIn row alert alert-info text-center"
-		role="alert" data-ng-show="message">
-		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ message }}</strong>
-	</div>
 	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" data-ng-show="success">
+		role="alert" data-ng-show="status.delete_success">
 		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ success }}</strong> <span
-			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+		<strong>Successfully deleted the gateway.</strong>
 	</div>
 	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" data-ng-show="error">
+		role="alert" data-ng-show="status.delete_error">
 		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ error }}</strong> <span
-			class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+		<strong>{{(message) ? message : 'Failed to delete the gateway. Please contact support if this problem persists.'}}</strong> <span
+			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
 	</div>
 	<div class="row panel panel-primary filterable">
 		<div class="panel-heading">
-			<h3 class="panel-title">Manage Gateways <span data-ng-if="users.length != 0" class="badge">{{gateways.length}}</span></h3>
+			<h3 class="panel-title">Manage Gateways <span data-ng-if="gateways.length != 0" class="badge">{{gateways.length}}</span></h3>
 			<div class="pull-right">
 				<button class="btn btn-default btn-xs btn-filter">
 					<span class="glyphicon glyphicon-filter"></span> Filter
@@ -46,11 +39,11 @@
 			</thead>
 			<tbody>
 				<tr class="animated fadeIn" data-ng-repeat="g in gateways" data-ng-class="{'fadeOut': g.id == deleted}">
-					<td><span data-ng-if="g.id == new" class="label label-default">New</span> <a href="#/Gateways/Edit/{{g.id}}">{{g.name}}</a></td>
+					<td><span data-ng-if="g.id == n" class="label label-default">New</span> <a href="#/Gateways/Edit/{{g.id}}">{{g.name}}</a></td>
 					<td>{{g.IP}}</td>
 					<td>{{g.port}}</td>
 					<td>{{g.type}}</td>
-					<td><button class="btn btn-xs btn-danger" data-ng-click="delete(g.id, $index)">Delete</button></td>
+					<td><button class="btn btn-xs btn-danger" data-ng-click="destroy(g.id, $index)">Delete</button></td>
 				</tr>
 			</tbody>
 		</table>

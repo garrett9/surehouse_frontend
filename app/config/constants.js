@@ -2,6 +2,6 @@
  * Apply constants for the web app's domain, and the REST API domain.
  */
 app.constant('URLS', {
-	BASE: 'http://155.246.239.239:8080',
-	API: 'https://155.246.239.239:8443'
+	BASE: 'http://ec2-54-172-156-188.compute-1.amazonaws.com',
+	API: 'https://ec2-54-172-156-188.compute-1.amazonaws.com'
 });

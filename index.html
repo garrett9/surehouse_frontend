@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html data-ng-app="surehouse-app">
 <head>
-<title></title>
+<title
+	data-ng-bind="'SureHouse' + ($root.title ? ' - ' + $root.title: '')"></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- CSS libraries -->
@@ -9,64 +10,26 @@
 <link rel="stylesheet" type="text/css" href="css/app.css">
 <link rel="stylesheet" type="text/css" href="css/loading-bar.min.css">
 <link rel="stylesheet" type="text/css" href="css/animate.css">
-<link rel="stylesheet" type="text/css" href="css/ladda-themeless.min.css">
+<link rel="stylesheet" type="text/css"
+	href="css/ladda-themeless.min.css">
 <link rel="stylesheet" type="text/css" href="css/tablesort.css">
+<link rel="stylesheet" type="text/css" href="css/table-filter.min.css">
+<link rel="stylesheet" type="text/css" href="app/app.css">
 
-<style type="text/css">
-    html,
-body {
-   margin:0;
-   padding:0;
-   height:100%;
-}
-#container {
-   min-height:100%;
-   position:relative;
-}
-#header {
-   padding:0px;
-}
-#body {
-   padding:10px;
-   padding-bottom:30px;   /* Height of the footer */
-}
-#footer {
-   position:absolute;
-   bottom:0;
-   width:100%;
-   height:0px;   /* Height of the footer */
-}
-
-header {
-	margin-top: 150px;
-}
-
-p#info {
-	color: #02c1f5;
-}
-
-.panel {
-    z-index: 1
-}
-nav {
-    z-index: 2
-}
-</style>
 </head>
 <body>
-	<div id="container" class="container">
-		<div id="header" data-ng-if="showMenu" class="header">
-			<div class="row" data-ng-include="'app/templates/menu/menu.html'"></div>
-		</div>
-		
-		<div id="body" data-ng-show="noToken || authenticated" class="animated" data-ng-class="{'hinge':fatal_error}" data-ng-view></div>
-	
-		<div id="footer" class="footer navbar-fixed-bottom">
-			<p class="row animated fadeInRight text-center">SURE HOUSE
-				Dashboard | Copyright &copy; 2014</p>
-		</div>
+	<div id="header" class="header">
+		<div data-ng-include="'app/templates/menu/menu.html'"></div>
 	</div>
-	
+
+	<div id="body" data-ng-view></div>
+
+	<div id="footer" class="footer navbar-fixed-bottom">
+		<p class="row animated fadeInRight text-center">SURE HOUSE
+			Dashboard | Copyright &copy; 2014</p>
+	</div>
+
+
 	<!-- JS libraries -->
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -81,13 +44,16 @@ nav {
 	<script src="js/angular-sanitize.min.js"></script>
 	<script src="js/ng-csv.min.js"></script>
 	<script src="js/angular-tablesort.js"></script>
-	
+
 	<!-- The application -->
 	<script src="app/app.js"></script>
-	
+
 	<!-- Configurations -->
 	<script src="app/config/constants.js"></script>
-	
+
+	<!-- Directives -->
+	<script src="app/directives/errors.js"></script>
+
 	<!-- Services -->
 	<script src="app/services/User.js"></script>
 	<script src="app/services/Gateway.js"></script>
@@ -96,7 +62,7 @@ nav {
 	<script src="app/services/API.js"></script>
 	<script src="app/services/AlertSubscription.js"></script>
 	<script src="app/services/Query.js"></script>
-	
+
 	<!-- Controllers -->
 	<script src="app/controllers/UsersController.js"></script>
 	<script src="app/controllers/HomeController.js"></script>
@@ -106,6 +72,6 @@ nav {
 	<script src="app/controllers/ErrorController.js"></script>
 	<script src="app/controllers/AlertSubscriptionsController.js"></script>
 	<script src="app/controllers/QueryController.js"></script>
-	
+
 </body>
 </html>

@@ -1,21 +1,15 @@
-<link rel="stylesheet" type="text/css" href="./css/table-filter.min.css">
-<div class="row animated fadeInLeft">
+<div class="container animated fadeInLeft">
 	<span data-ng-if="authenticated"><span data-ng-init="all()"></span></span>
-	<div class="animated fadeIn row alert alert-info text-center"
-		role="alert" data-ng-show="message">
-		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ message }}</strong>
-	</div>
 	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" data-ng-show="success">
+		role="alert" data-ng-show="status.delete_success">
 		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ success }}</strong> <span
+		<strong>Successfully deleted the alert.</strong> <span
 			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
 	</div>
 	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" data-ng-show="error">
+		role="alert" data-ng-show="status.delete_error">
 		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ error }}</strong> <span
+		<strong>Failed to delete the alert. Please contact support if this problem persists.</strong> <span
 			class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
 	</div>
 	<div class="row panel panel-primary filterable">
@@ -53,7 +47,7 @@
 			<tbody>
 				<tr class="animated fadeIn" data-ng-repeat="a in alerts"
 					data-ng-class="{'fadeOut': a.id == deleted}">
-					<td><span data-ng-if="a.id == new" class="label label-default">New</span>
+					<td><span data-ng-if="a.id == n" class="label label-default">New</span>
 						<a href="#/Alerts/Edit/{{a.id}}">{{a.name}}</a></td>
 					<td>{{a.sensor}}</td>
 					<td>{{operationText(a.operation)}}</td>
@@ -61,7 +55,7 @@
 					<td>{{a.timespan}}</td>
 					<td>{{(a.active) ? 'Active' : 'Inactive'}}</td>
 					<td><button class="btn btn-xs btn-danger"
-							data-ng-click="delete(a.id, $index)">Delete</button></td>
+							data-ng-click="destroy(a.id, $index)">Delete</button></td>
 				</tr>
 			</tbody>
 		</table>
