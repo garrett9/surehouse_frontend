@@ -44,9 +44,19 @@ app.factory('Query', function(API) {
 			API.GET('/Reporting/Custom?' + this.serializeParams(data, true), success, error);
 		},
 		
+		// Performs the same as a 'custom' request, except view POST
+		customPost: function(data, success, error) {
+			API.POST('/Reporting/Custom', data, success, error);
+		},
+		
 		// Performs a "most recent" query with the back end feeds of the SureHouse application.
 		recent: function(data, success, error) {
 			API.GET('/Reporting/Recent?' + this.serializeParams(data, false), success, error);
+		},
+		
+		// Performs the same as a 'most recent' request, except via POST
+		recentPOST: function(data, success, error) {
+			API.POST('/Reporting/Recent', data, success, error);
 		},
 		
 		// Handles a query by specifying what type of query it is.
