@@ -97,6 +97,7 @@ app.controller('QueryController', function($scope, $timeout, $location, $localSt
 	$scope.query = function() {
 		var params;
 		if($.isArray($scope.params['sensors[]']) && $scope.params['sensors[]'].length > 0) {
+			console.log($scope.params);
 			$scope.error = false;
 			if($scope.isCustom)
 				$location.path('/Query/Custom').search($scope.params);

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html data-ng-app="surehouse-app">
+<html data-ng-app="app">
 <head>
 <title
 	data-ng-bind="'SureHouse' + ($root.title ? ' - ' + $root.title: '')"></title>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- CSS libraries -->
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="css/app.css">
 <link rel="stylesheet" type="text/css" href="css/loading-bar.min.css">
 <link rel="stylesheet" type="text/css" href="css/animate.css">
 <link rel="stylesheet" type="text/css"
@@ -17,17 +17,17 @@
 <link rel="stylesheet" type="text/css" href="app/app.css">
 
 </head>
-<body>
+<body class="font-size-16">
 	<div id="header" class="header">
 		<div data-ng-include="'app/templates/menu/menu.html'"></div>
 	</div>
 
 	<div id="body" data-ng-view></div>
 
-	<div id="footer" class="footer navbar-fixed-bottom">
+	<!-- <div id="footer" class="footer navbar-fixed-bottom">
 		<p class="row animated fadeInRight text-center">SURE HOUSE
 			Dashboard | Copyright &copy; 2014</p>
-	</div>
+	</div> -->
 
 
 	<!-- JS libraries -->
@@ -44,6 +44,9 @@
 	<script src="js/angular-sanitize.min.js"></script>
 	<script src="js/ng-csv.min.js"></script>
 	<script src="js/angular-tablesort.js"></script>
+	<script src="js/d3.min.js"></script>
+	<script src="js/nv.d3.min.js"></script>
+	<script src="js/angular-nvd3.min.js"></script>
 
 	<!-- The application -->
 	<script src="app/app.js"></script>
@@ -65,13 +68,14 @@
 
 	<!-- Controllers -->
 	<script src="app/controllers/UsersController.js"></script>
-	<script src="app/controllers/HomeController.js"></script>
 	<script src="app/controllers/GatewaysController.js"></script>
 	<script src="app/controllers/SensorsController.js"></script>
 	<script src="app/controllers/AlertsController.js"></script>
 	<script src="app/controllers/ErrorController.js"></script>
 	<script src="app/controllers/AlertSubscriptionsController.js"></script>
 	<script src="app/controllers/QueryController.js"></script>
+	
+	<script src="app/controllers/HvacBarController.js"></script>
 
 </body>
 </html>

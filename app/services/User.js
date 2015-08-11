@@ -5,6 +5,16 @@ app.factory('User', function(API) {
 	
 	return {
 		
+		// Check to see if a user's JWT is still authenticated
+		authenticated: function(success, error) {
+			API.GET('/Users/Authenticated', success, error);
+		},
+		
+		// Refresh a user's authentication token
+		refresh: function(success, error) {
+			API.GET('/Users/Refresh', success, error);
+		},
+		
 		// Attempt to login the user with the user's current credentials.
 		login: function(data, success, error) {
 			API.POST('/Users/Login', data, success, error);

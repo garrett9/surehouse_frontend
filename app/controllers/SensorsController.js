@@ -7,6 +7,7 @@ app.controller('SensorsController', function($scope, $location, $timeout, $route
 		$scope.n = $routeParams.n;
 		Sensor.all(function(res, status) {
 			$scope.sensors = res.payload;
+			$scope.loaded = true;
 		});
 	}
 	

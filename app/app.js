@@ -1,6 +1,7 @@
-var app = angular.module('surehouse-app', ['tableSort', 'angular-ladda', 'checklist-model', 'ngRoute', 'ngStorage', 'angular-loading-bar', 'ngSanitize', 'ngCsv']);
+var app = angular.module('app', ['nvd3', 'tableSort', 'angular-ladda', 'checklist-model', 'ngRoute', 'ngStorage', 'angular-loading-bar', 'ngSanitize', 'ngCsv']);
 
 app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
+
 	/**
 	 * The first step is to establish out routes, the controllers that are used in them, and the template that they use.
 	 */
@@ -8,15 +9,14 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 	/**
 	 * Routes that use the UsersController
 	 */
-	.when('/', {
+	.when('/Users/Login', {
 		controller: 'UsersController', 
 		templateUrl: 'app/templates/users/login.html',
 		title: 'Welcome!'
 	})
-	.when('/Home', {
-		controller: 'HomeController',
-		templateUrl: 'app/templates/home/dashboard.html',
-		title: 'Home',
+	.when('/', {
+		templateUrl: 'app/templates/charts/dashboard.html',
+		title: 'Home'
 	})
 	.when('/Users', {
 		controller: 'UsersController',
@@ -166,12 +166,7 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 	// Matches YYYY-mm-dd HH:ii:ss dates
 	var dateRegex = /^((((19|[2-9]\d)\d{2})[\/\.-](0[13578]|1[02])[\/\.-](0[1-9]|[12]\d|3[01])\s(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]))|(((19|[2-9]\d)\d{2})[\/\.-](0[13456789]|1[012])[\/\.-](0[1-9]|[12]\d|30)\s(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]))|(((19|[2-9]\d)\d{2})[\/\.-](02)[\/\.-](0[1-9]|1\d|2[0-8])\s(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[\/\.-](02)[\/\.-](29)\s(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])))$/g;
 
-	var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-	var monthNames = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-	var estOffset = 3600000 * -4; //EDT is 5 hours behind UTC
-
-	utcToLocal = function(input) {
+	dataConversions = function(input, toServer) {
 		// Ignore things that aren't objects.
 		if (typeof input !== "object") return input;
 
@@ -182,23 +177,25 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 			var match;
 			// Check for string properties which look like dates.
 			if (typeof value === "string" && (match = value.match(dateRegex))) {
-				var milliseconds = Date.parse(match[0])
-				if (!isNaN(milliseconds)) {
-					date = new Date(milliseconds + estOffset);
-					var hour = date.getHours();
-					var dd = 'AM';
-					if(hour > 12) {
-						hour -= 12;
-						dd = 'PM';
-					}
-					var minutes = date.getMinutes();
-					if(minutes < 10)
-						minutes = '0' + minutes;
-					input[key] = dayNames[date.getDay()] + ', ' + monthNames[date.getMonth() + 1] + ', '+ date.getDate() + ' ' + hour + ':' + minutes + ' ' + dd + ' EDT';
+				if(!toServer) {
+					var milliseconds = Date.parse(match[0] + ' UTC')
+					if (!isNaN(milliseconds))
+						input[key] = milliseconds;
 				}
-			} else if (angular.isObject(value) || angular.isArray(value)) {
+				else {
+					var milliseconds = Date.parse(match[0]);
+					if(!isNaN(milliseconds)) {
+						var date = new Date(milliseconds);
+						input[key] = date.getUTCFullYear() + '-' + date.getUTCMonth + '-' + date.getUTCDay() + ' ' + date.getUTCHours + ':' + date.getUTCMinutes();
+					}
+				}
+			} 
+			else if(!toServer && isFinite(value)) {
+				input[key] = parseInt(value);
+			}
+			else if (angular.isObject(value) || angular.isArray(value)) {
 				// Recurse into object
-				utcToLocal(value);
+				dataConversions(value);
 			}
 		}
 		return input;
@@ -207,7 +204,7 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 	/**
 	 * Interceptors allow us to intercept requests and responses before being passed onto the controller.
 	 */
-	$httpProvider.interceptors.push(function($rootScope, $q, $location, $localStorage, $timeout, URLS) {
+	$httpProvider.interceptors.push(function($rootScope, $q, $location, $localStorage, $injector, $timeout, URLS) {
 		var setStatus = function(method, isSuccess) {
 			$rootScope.status = {};
 			switch(method) {
@@ -244,6 +241,7 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 				if(config.url.indexOf(URLS.API) == 0) {
 					$rootScope.loading = true;
 					$rootScope.status = {};
+					dataConversions(config, true);
 					if($localStorage.token)
 						config.headers.Authorization = 'Bearer ' + $localStorage.token;
 				}
@@ -261,12 +259,12 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 				delete $rootScope.errors;
 				//Get the new token that is issued on each request
 				if(response.config.url.indexOf(URLS.API) == 0) {
+					console.log(response);
 					$rootScope.loading = false;
 					setStatus(response.config.method, true);
 				}
-
 				if(!angular.isUndefined(response.data.payload))
-					response.data.payload = utcToLocal(response.data.payload);
+					response.data.payload = dataConversions(response.data.payload);
 
 				return response;
 			},
@@ -282,16 +280,27 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 						else
 							delete $rootScope.errors;
 					}
-					else if(response.status === 401 && $location.path() != '/') {
+					else if(response.status === 401) {
 						delete $localStorage.token;
-						$location.path('/');
+						$rootScope.authenticated = false;
+						$location.path('/Users/Login');
 					}
-					else if(response.status === 403)
-						$location.path('/403');
-					else if(response.status === 404)
-						$location.path('/404');
-					else if(response.status === 0 || response.status === 500)
-						$location.path('/500');
+					// If a 419 response is returned, we attempt to refresh the JWT token
+					if(response.status = 419 || (response.status === 500 && response.data.status === 419)) {
+						var User = $injector.get('User');
+						var deferred = $q.defer();
+						User.refresh(function(res) {
+							// Successfully refreshed the token
+							$localStorage.token = res.payload.auth_token;
+							var $http = $injector.get('$http');
+							$http(response.config).then(deferred.resolve, deferred.reject);
+						}, function() {
+							// Failed to refresh the token
+							delete $localStorage.token;
+							$location.path('/Users/Login');
+						});
+						return deferred.promise;
+					}
 				}
 				return $q.reject(response);
 			}
@@ -306,41 +315,17 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
  * validate the token. If it is validated, the user continues as normal. If it's
  * not valid, then the user will be redirected to the login page.
  */
-app.run(function($localStorage, $route, $rootScope, $location, $http, URLS) {
+app.run(function($localStorage, $route, $rootScope, $location, $http, User, URLS) {
+	if($localStorage.token)
+		$rootScope.authenticated = true;
+	else
+		$rootScope.authenticated = false;
+	
 	// Loading = true means that an HTTP request is being performed. False otherwise
 	$rootScope.loading = false;
-
-	// Authenticated = true means that the incoming using is authenticated already
-	$rootScope.authenticated = false;
-
-	if($localStorage.token) {
-		$http.get(URLS.API + '/Users/Refresh').success(function() {
-			$rootScope.authenticated = true;
-		})
-		.error(function() {
-			$rootScope.authenticated = false;
-			delete $localStorage.token;
-		});
-	}
-
-	/**
-	 * Monitor whenever the route is about to change.
-	 * If the client does not have a token, redirect them to the login page to get one.
-	 */
-	$rootScope.$on('$routeChangeStart', function(args) {
-		//console.log($localStorage.token);
-		/*console.log($location.path());
-		if(!($localStorage.token)) 
-			$location.path('/');*/
-	});
 
 	// On every successfully route change
 	$rootScope.$on('$routeChangeSuccess', function(currentRoute, previousRote) {
 		$rootScope.title = $route.current.title;
 	});
-
-	// Execute before closing the window.
-	/*$window.onbeforeunload = function (evt) {
-		delete $localStorage.token;
-	}*/
 });

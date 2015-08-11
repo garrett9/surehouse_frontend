@@ -40,3 +40,7 @@ p#info {
 nav {
 	z-index: 2
 }
+
+.font-size-16 {
+	font-size: 16px;	
+}
