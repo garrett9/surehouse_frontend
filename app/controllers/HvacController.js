@@ -1,7 +1,10 @@
-app.controller('HvacBarController', function($scope, $location, $timeout, Query) {
+/**
+ * A controller for managing the temperature chart.
+ */
+app.controller('HvacController', function($scope, $interval) {
 
-	// Initialize the options to use in the chart
-	var init_options = function() {
+	// Initialize the options for displaying the chart
+	$scope.initOptions = function() {
 		$scope.options = {
 				chart: {
 					type: 'discreteBarChart',
@@ -12,36 +15,23 @@ app.controller('HvacBarController', function($scope, $location, $timeout, Query)
 						bottom: 60,
 						left: 55
 					},
-					title: {
-						enable: true,
-						text: "Title for Line Chart"
-					},
 					x: function(d){return d.label;},
 					y: function(d){return d.value;},
 					showValues: true,
 					valueFormat: function(d){
-						return d3.format(',1')(d);
-					},
-					title: {
-						enable: true,
-						text: "Write Your Title",
-						className: "h4",
-						css: {
-							width: "nullpx",
-							textAlign: "center"
-						}
+						return d3.format(',.1f')(d);
 					},
 					transitionDuration: 500,
 					yAxis: {
-						axisLabel: '%',
+						axisLabel: 'Y Axis',
 						axisLabelDistance: 30
 					}
 				}
 		};
 	}
 
-	// Retrieve the information needed for the chart
-	var get_data = function() {
+	// Retrieve the data to display in the chart
+	$scope.getData = function() {
 		$scope.data = [
 		               {
 		            	   key: "Cumulative Return",
@@ -55,19 +45,18 @@ app.controller('HvacBarController', function($scope, $location, $timeout, Query)
 		            	            	"value" : 0.9
 		            	            } ,
 		            	            {
-		            	            	"label" : "Budget" ,
+		            	            	"label" : "Balance" ,
 		            	            	"value" : 1.3
 		            	            }
-
 		            	            ]
 		               }
 		               ];
 	}
 
-	// Initialize the information the chart needs to display
-	$scope.init_hvac_bar = function() {
-		init_options();
-		get_data();
+	// Initialize the chart
+	$scope.initChart = function() {
+		$scope.initOptions();
+		$scope.getData();
 	}
 
 });

@@ -1,23 +1,41 @@
-<div class="container animated fadeInLeft">
-	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" data-ng-show="status.post_success" data-ng-class="{'fadeOutRight':fade}">
-		<strong>Successfully created the gateway.</strong> <span
-			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-	</div>
-	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" data-ng-show="status.post_error">
-		<span class="glyphicon glyphicon-alert" aria-hidden="true"></span> <strong>Failed to create the gateway!</strong>
-	</div>
-	<form data-ng-class="{'fadeOutRight':status.post_success}" data-errors="errors"
-		class="animated row form-horizontal" data-ng-submit="create()">
-		<fieldset data-ng-disabled="loading">
-			<legend class="text-center">Create a New Gateway</legend>
-			<div id="field" data-ng-include="'app/templates/gateways/fields.html'"></div>
-			<div class="form-group text-center">
-				<button type="submit" class="btn btn-primary" data-ladda="loading">
-					Create Gateway
-				</button>
+<div
+	class="col-md-10 animated fadeIn alert alert-success top-general-alert"
+	role="alert" data-ng-show="status.post_success"
+	data-ng-class="{'fadeOutRight':fade}">
+	<strong>Successfully created the gateway.</strong> <span
+		class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+</div>
+<div
+	class="col-md-10 animated fadeIn alert alert-danger top-general-alert"
+	role="alert" data-ng-show="status.post_error">
+	<span class="glyphicon glyphicon-alert" aria-hidden="true"></span> <strong>Failed
+		to create the gateway!</strong>
+</div>
+
+<!-- content-wrapper -->
+<div class="col-md-10 content-wrapper">
+	<!-- main -->
+	<div class="content">
+		<div class="main-content">
+			<div class="widget animated fadeIn"
+				data-ng-class="{'fadeOut':status.post_success}">
+				<div class="widget-header"></div>
+				<div class="widget-content">
+
+					<form data-errors="errors" class="form-horizontal"
+						data-ng-submit="create()">
+						<fieldset data-ng-disabled="loading">
+							<legend class="text-center">Create a New Gateway</legend>
+							<div id="field"
+								data-ng-include="'app/templates/gateways/fields.html'"></div>
+							<div class="form-group text-center">
+								<button type="submit" class="btn btn-primary"
+									data-ladda="loading">Create Gateway</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
-		</fieldset>
-	</form>
+		</div>
+	</div>
 </div>

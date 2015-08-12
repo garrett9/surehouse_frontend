@@ -12,11 +12,12 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 	.when('/Users/Login', {
 		controller: 'UsersController', 
 		templateUrl: 'app/templates/users/login.html',
-		title: 'Welcome!'
+		title: 'Login'
 	})
 	.when('/', {
 		templateUrl: 'app/templates/charts/dashboard.html',
-		title: 'Home'
+		controller: 'DashboardController',
+		title: 'Weclome!'
 	})
 	.when('/Users', {
 		controller: 'UsersController',
@@ -259,7 +260,6 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 				delete $rootScope.errors;
 				//Get the new token that is issued on each request
 				if(response.config.url.indexOf(URLS.API) == 0) {
-					console.log(response);
 					$rootScope.loading = false;
 					setStatus(response.config.method, true);
 				}
@@ -286,7 +286,7 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 						$location.path('/Users/Login');
 					}
 					// If a 419 response is returned, we attempt to refresh the JWT token
-					if(response.status = 419 || (response.status === 500 && response.data.status === 419)) {
+					if(response.status == 419 || (response.status === 500 && response.data.status === 419)) {
 						var User = $injector.get('User');
 						var deferred = $q.defer();
 						User.refresh(function(res) {
@@ -315,17 +315,56 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
  * validate the token. If it is validated, the user continues as normal. If it's
  * not valid, then the user will be redirected to the login page.
  */
-app.run(function($localStorage, $route, $rootScope, $location, $http, User, URLS) {
+app.run(function($localStorage, $route, $rootScope, $interval, Settings, URLS) {
 	if($localStorage.token)
 		$rootScope.authenticated = true;
 	else
 		$rootScope.authenticated = false;
-	
+
 	// Loading = true means that an HTTP request is being performed. False otherwise
 	$rootScope.loading = false;
+
+	// Before every route change
+	$rootScope.$on('$routeChangeStart', function() {
+		$rootScope.status = {};
+	});
 
 	// On every successfully route change
 	$rootScope.$on('$routeChangeSuccess', function(currentRoute, previousRote) {
 		$rootScope.title = $route.current.title;
 	});
+
+	// Add some functions to the root scope to get settings regarding the whole system
+	// Set the address of the system
+	$rootScope.setAddress = function() {
+		Settings.setAddress({address: $rootScope.settings.address}, function() {
+			$rootScope.settings.success = true;
+		}, function() {
+			$rootScope.settings.error = true;
+		});
+	}
+
+	// Set whether the house is in sustainable or resilient mode
+	$rootScope.setResilientMode = function(boolean) {
+		var boolean = (boolean) ? 1 : 0;
+		Settings.setResilientMode(boolean, function(res) {
+			$rootScope.settings.resilient_mode = boolean;
+		});
+	}
+
+	var getSettings = function() {
+		Settings.getSettings(function(res) {
+			$rootScope.settings.address = res.payload.address;
+			$rootScope.settings.resilient_mode = res.payload.resilient_mode;
+		});
+	}
+	
+	// Get the settings of the application
+	$rootScope.getSettings = function() {
+		// Get the settings of the application every minute
+		$interval(getSettings, 1000 * 60);
+	}
+	$rootScope.settings = {};
+	getSettings();
+	$rootScope.getSettings();
 });

@@ -1,4 +1,4 @@
-
+<!-- 
 <img src='img/surehouse_slice.png' alt="SureHouse Slice" class="img-responsive"> 
 <div class="container">
 	<div class="row animated fadeInLeft">
@@ -9,4 +9,142 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
+<!-- main -->
+<div class="col-md-10 content-wrapper animated fadeIn">
+	<div class="content">
+		<div class="main-header">
+			<h2>SureHouse Dashboard</h2>
+			<em>{{($root.settings.resilient_mode) ? 'Resilient' :
+				'Sustainable'}}</em>
+		</div>
+		<div class="main-content">
+			<div class="row">
+				<div class="col-md-8">
+					<!-- WIDGET REMINDER -->
+					<div class="widget">
+						<div class="widget-header">
+							<h3>Status</h3>
+						</div>
+						<div class="widget-content">
+							<div class="animated fadeIn text-center"
+								data-ng-show="$root.settings.resilient_mode">
+								<img src="img/Resiliency_ShuttersDown_sm.png"
+									alt="House - Shutters Up" />
+							</div>
+							<div class="animated fadeIn text-center"
+								data-ng-show="!$root.settings.resilient_mode">
+								<img src="img/Resiliency_ShuttersUp_sm.png"
+									alt="House - Shutters Up" />
+							</div>
+						</div>
+					</div>
+					<!-- END WIDGET REMINDER -->
+				</div>
+				<div class="col-md-4">
+					<!-- WIDGET REMINDER -->
+					<div class="widget widget-hide-header widget-reminder">
+						<div class="widget-header hide">
+							<h3>Status</h3>
+						</div>
+						<div class="widget-content">
+							<div class="today-reminder">
+								<h3 class="reminder-title">Today's Report</h3>
+								<p class="reminder-time">
+									<i class="fa fa-clock-o"></i> {{date | date:'short'}}
+								</p>
+								<p class="reminder-place">
+									<i class="wi wi-thermometer"></i> 78&deg; F
+								</p>
+								<i class="wi {{weather_icon}}" style="animation: none;"></i> <em
+									class="reminder-notes">{{$root.settings.address}}</em>
+							</div>
+						</div>
+					</div>
+					<!-- END WIDGET REMINDER -->
+				</div>
+			</div>
+
+			<!-- WIDGET MAIN CHART WITH TABBED CONTENT -->
+			<div class="widget">
+				<div class="widget-header">
+					<h3>
+						<i class="wi wi-thermometer"></i> Temperature
+					</h3>
+					<em>- Outdoor Temp, Indoor Avg, Indoor Max, and Indoor Min</em>
+					<div class="btn-group widget-header-toolbar">
+						<a href="#" id="tour-focus" title="Focus"
+							class="btn-borderless btn-focus"><i class="fa fa-eye"></i></a> <a
+							href="#" title="Expand/Collapse"
+							class="btn-borderless btn-toggle-expand"></a><a href="#"
+							title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i
+							class="fa fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="widget-content">
+					<!-- chart tab nav -->
+					<div class="chart-nav">
+						<strong>Select period: </strong>
+						<ul id="sales-stat-tab">
+							<li data-ng-init="temp_period='today'"
+								data-ng-class="{'active': temp_period=='today'}"><a href=""
+								data-ng-click="temp_period='today'">Today</a></li>
+							<li data-ng-class="{'active': temp_period=='week'}"><a
+								href="" data-ng-click="temp_period='week'">This Week</a></li>
+							<li data-ng-class="{'active': temp_period=='month'}"><a
+								href="" data-ng-click="temp_period='month'">This Month</a></li>
+						</ul>
+					</div>
+					<!-- end chart tab nav -->
+					<!-- chart placeholder-->
+					<div data-ng-controller="TemperatureController"
+						data-ng-init="initChart()">
+						<nvd3 options="options" data="data"></nvd3>
+					</div>
+				</div>
+			</div>
+			<!-- END WIDGET MAIN CHART WITH TABBED CONTENT -->
+
+			<div class="row">
+				<div class="col-md-6">
+					<!-- WIDGET TABLE -->
+					<div class="widget widget-table">
+						<div class="widget-header">
+							<h3>
+								<i class="fa fa-plug"></i> Energy
+							</h3>
+							<div class="btn-group widget-header-toolbar">
+								<a href="#" title="Focus" class="btn-borderless btn-focus"><i
+									class="fa fa-eye"></i></a> <a href="#" title="Expand/Collapse"
+									class="btn-borderless btn-toggle-expand"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+						</div>
+						<div class="widget-content" data-ng-controller="EnergyController"
+							data-ng-init="initChart()">
+							<nvd3 options="options" data="data"></nvd3>
+						</div>
+					</div>
+					<!-- END WIDGET TABLE -->
+				</div>
+				<div class="col-md-6">
+					<div class="widget">
+						<div class="widget-header">
+							<h3>Energy for HVAC System</h3>
+							<div class="btn-group widget-header-toolbar">
+								<a href="#" title="Focus" class="btn-borderless btn-focus"><i
+									class="fa fa-eye"></i></a> <a href="#" title="Expand/Collapse"
+									class="btn-borderless btn-toggle-expand"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+						</div>
+						<div class="widget-content" data-ng-controller="HvacController"
+							data-ng-init="initChart()">
+							<nvd3 options="options" data="data"></nvd3>
+						</div>
+					</div>
+				</div>
+				<!-- /main-content -->
+			</div>
+			<!-- /main -->
+		</div>

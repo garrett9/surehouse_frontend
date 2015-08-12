@@ -1,52 +1,72 @@
-<div class="container animated fadeInLeft">
-	<span data-ng-if="authenticated"><span data-ng-init="all()"></span></span>
-	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" data-ng-show="status.delete_success">
-		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>Successfully deleted the gateway.</strong>
-	</div>
-	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" data-ng-show="status.delete_error">
-		<button class="close" data-dismiss="alert">&times;</button>
-		<strong>{{(message) ? message : 'Failed to delete the gateway. Please contact support if this problem persists.'}}</strong> <span
-			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-	</div>
-	<div class="row panel panel-primary filterable">
-		<div class="panel-heading">
-			<h3 class="panel-title">Manage Gateways <span data-ng-if="gateways.length != 0" class="badge">{{gateways.length}}</span></h3>
-			<div class="pull-right">
-				<button class="btn btn-default btn-xs btn-filter">
-					<span class="glyphicon glyphicon-filter"></span> Filter
-				</button>
-				<a href="#/Gateways/Create" class="btn btn-success btn-xs">
-					<span class="glyphicon glyphicon-plus"></span> Create Gateway
-				</a>
+<div
+	class="col-md-10 animated fadeIn alert alert-success top-general-alert"
+	role="alert" data-ng-show="status.delete_success">
+	<strong>Successfully deleted the gateway.</strong> <span
+		class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+	<button class="close" data-ng-click="status.delete_success=null">&times;</button>
+</div>
+<div
+	class="col-md-10 animated fadeIn alert alert-danger top-general-alert"
+	role="alert" data-ng-show="status.delete_error">
+	<strong>{{(message) ? message : 'Failed to delete the gateway.
+		Please contact support if this problem persists.'}}</strong> <span
+		class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+	<button class="close" data-ng-click="status.delete_error=null">&times;</button>
+</div>
+
+<div class="col-md-10 content-wrapper">
+	<!-- main -->
+	<div class="content">
+		<div class="main-content">
+			<span data-ng-init="all()"></span>
+			<div class="widget filterable animated fadeIn">
+				<div class="widget-header">
+					Manage Gateways <span data-ng-if="gateways.length != 0"
+						class="badge">{{gateways.length}}</span>
+					<div class="btn-group widget-header-toolbar">
+						<button class="btn btn-default btn-xs btn-filter">
+							<span class="glyphicon glyphicon-filter"></span> Filter
+						</button>
+						<a href="#/Gateways/Create" class="btn btn-success btn-xs text-white">
+							<span class="glyphicon glyphicon-plus"></span> Create Gateway
+						</a>
+					</div>
+				</div>
+				<div class="widget-content">
+					<div class="table-responsive">
+
+						<table class="table">
+							<thead>
+								<tr class="filters">
+									<th><input type="text" class="form-control"
+										placeholder="Name" disabled></th>
+									<th><input type="text" class="form-control"
+										placeholder="IP Address" disabled></th>
+									<th><input type="text" class="form-control"
+										placeholder="Port" disabled></th>
+									<th><input type="text" class="form-control"
+										placeholder="Type" disabled></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="animated fadeIn" data-ng-repeat="g in gateways"
+									data-ng-class="{'fadeOut': g.id == deleted}">
+									<td><span data-ng-if="g.id == n"
+										class="label label-default">New</span> <a
+										href="#/Gateways/Edit/{{g.id}}">{{g.name}}</a></td>
+									<td>{{g.IP}}</td>
+									<td>{{g.port}}</td>
+									<td>{{g.type}}</td>
+									<td><button class="btn btn-xs btn-danger"
+											data-ng-click="destroy(g.id, $index)">Delete</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
-		<table class="table">
-			<thead>
-				<tr class="filters">
-					<th><input type="text" class="form-control"
-						placeholder="Name" disabled></th>
-					<th><input type="text" class="form-control"
-						placeholder="IP Address" disabled></th>
-					<th><input type="text" class="form-control"
-						placeholder="Port" disabled></th>
-					<th><input type="text" class="form-control"
-						placeholder="Type" disabled></th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="animated fadeIn" data-ng-repeat="g in gateways" data-ng-class="{'fadeOut': g.id == deleted}">
-					<td><span data-ng-if="g.id == n" class="label label-default">New</span> <a href="#/Gateways/Edit/{{g.id}}">{{g.name}}</a></td>
-					<td>{{g.IP}}</td>
-					<td>{{g.port}}</td>
-					<td>{{g.type}}</td>
-					<td><button class="btn btn-xs btn-danger" data-ng-click="destroy(g.id, $index)">Delete</button></td>
-				</tr>
-			</tbody>
-		</table>
 	</div>
 </div>
 <script src="./js/table-filter.min.js"></script>

@@ -1,25 +1,39 @@
-<div class="container animated fadeInLeft">
-	<span data-ng-if="authenticated"><span data-ng-init="get()"></span></span>
-	<div class="animated fadeIn row alert alert-success text-center"
-		role="alert" data-ng-show="status.put_success">
-		<strong>Successfully saved your changes.</strong> <span
-			class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-	</div>
-	<div class="animated fadeIn row alert alert-danger text-center"
-		role="alert" data-ng-show="status.put_error">
-		<strong>Failed to save your changes.</strong> <span
-			class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-	</div>
-	<form data-ng-class="{'fadeInLeft':show}" data-ng-show="show" data-errors="errors"
-		class="animated row form-horizontal" data-ng-submit="save()">
-		<fieldset data-ng-disabled="loading">
-			<legend class="text-center">Editing {{gateway.name}}</legend>
-			<div id="field" data-ng-include="'app/templates/gateways/fields.html'"></div>
-			<div class="form-group text-center">
-				<button type="submit" class="btn btn-primary" data-ladda="loading">
-					Save 
-				</button>
+<div
+	class="col-md-10 animated fadeIn alert alert-success top-general-alert"
+	role="alert" data-ng-show="status.put_success">
+	<strong>Successfully saved your changes.</strong> <span
+		class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+</div>
+<div
+	class="col-md-10 animated fadeIn alert alert-danger top-general-alert"
+	role="alert" data-ng-show="status.put_error">
+	<strong>Failed to save your changes.</strong> <span
+		class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+</div>
+
+<!-- content-wrapper -->
+<div class="col-md-10 content-wrapper">
+	<!-- main -->
+	<div class="content">
+		<div class="main-content">
+			<div class="widget animated fadeIn">
+				<div class="widget-header"></div>
+				<div class="widget-content">
+					<span data-ng-init="get()"></span>
+					<form data-ng-show="show" data-errors="errors"
+						class="form-horizontal" data-ng-submit="save()">
+						<fieldset data-ng-disabled="loading">
+							<legend class="text-center">Editing {{gateway.name}}</legend>
+							<div id="field"
+								data-ng-include="'app/templates/gateways/fields.html'"></div>
+							<div class="form-group text-center">
+								<button type="submit" class="btn btn-primary"
+									data-ladda="loading">Save</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
-		</fieldset>
-	</form>
+		</div>
+	</div>
 </div>

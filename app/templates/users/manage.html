@@ -1,21 +1,41 @@
-<div class="container">
-	<div class="animated fadeInLeft" data-ng-show="!loading">
-		<div class="row col-md-12">
-			<div class="animated fadeIn alert alert-danger text-center"
-				role="alert" data-ng-show="manage_error">
-				<strong>{{ manage_error }}</strong>
-			</div>
-			<div class="animated fadeIn alert alert-success text-center"
-				role="alert" data-ng-show="manage_success"
-				data-ng-click="manage_success=null">
-				<strong>{{ manage_success }}</strong>
-			</div>
-			<div class="panel panel-primary" data-ng-init="self()">
-				<div class="panel-heading">Your Account</div>
-				<form class="form-horizontal" data-ng-submit="manage()">
+<div
+	class="col-md-10 animated fadeIn alert alert-danger top-general-alert"
+	role="alert" data-ng-show="manage_error">
+	<strong>{{ manage_error }}</strong>
+	<button class="close" data-ng-click="manage_error=null">&times;</button>
+</div>
+<div
+	class="col-md-10 animated fadeIn alert alert-success top-general-alert"
+	role="alert" data-ng-show="manage_success">
+	<strong>{{ manage_success }}</strong>
+	<button class="close" data-ng-click="manage_success=null">&times;</button>
+</div>
+
+<div
+	class="col-md-10 animated fadeIn alert alert-danger top-general-alert"
+	role="alert" data-ng-show="password_error">
+	<strong>{{ password_error }}</strong>
+	<button class="close" data-ng-click="password_error=null">&times;</button>
+</div>
+<div
+	class="col-md-10 animated fadeIn alert alert-success top-general-alert"
+	role="alert" data-ng-show="password_success">
+	<strong>{{ password_success }}</strong>
+	<button class="close" data-ng-click="password_error=null">&times;</button>
+</div>
+
+<div class="col-md-5 content-wrapper">
+	<!-- main -->
+	<div class="content">
+		<div class="main-content">
+			<span data-ng-init="all()"></span>
+			<div class="widget filterable animated fadeIn">
+				<div class="widget-header">Your Account</div>
+
+				<form data-ng-init="self()" class="form-horizontal" data-ng-submit="manage()">
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-xs-2 control-label">Username</label>
+							<label class="col-xs-3 control-label">Username</label>
 							<div class="col-xs-8">
 								<input id="username" name="username" type="text"
 									data-ng-model="user.name" class="form-control input-xs"
@@ -26,7 +46,7 @@
 						</div>
 						<div class="form-group"
 							data-ng-class="{'has-error':manage_errors.email}">
-							<label class="col-xs-2 control-label">Email</label>
+							<label class="col-xs-3 control-label">Email</label>
 							<div class="col-xs-8">
 								<input id="email" name="email" type="email" placeholder="Email"
 									class="form-control input-xs" data-ng-model="user.email"
@@ -48,22 +68,22 @@
 				</form>
 			</div>
 		</div>
-		<div class="row col-md-12">
-			<div class="animated fadeIn alert alert-danger text-center"
-				role="alert" data-ng-show="password_error">
-				<strong>{{ password_error }}</strong>
-			</div>
-			<div class="animated fadeIn alert alert-success text-center"
-				role="alert" data-ng-show="password_success">
-				<strong>{{ password_success }}</strong>
-			</div>
-			<div class="panel panel-primary">
-				<div class="panel-heading">Password Reset</div>
+	</div>
+</div>
+
+<div class="col-md-5 content-wrapper">
+	<!-- main -->
+	<div class="content">
+		<div class="main-content">
+			<span data-ng-init="all()"></span>
+			<div class="widget filterable animated fadeIn">
+				<div class="widget-header">Password Reset</div>
+
 				<form class="form-horizontal" data-ng-submit="changePassword()">
 					<div class="panel-body">
 						<div class="form-group"
 							data-ng-class="{'has-error':password_errors.old_password}">
-							<label class="col-xs-2 control-label">Old Password</label>
+							<label class="col-xs-3 control-label">Old Password</label>
 							<div class="col-xs-8">
 								<input id="old_password" name="old_password" type="password"
 									placeholder="Old Password" class="form-control input-xs"
@@ -79,7 +99,7 @@
 						</div>
 						<div class="form-group"
 							data-ng-class="{'has-error':errors.new_password}">
-							<label class="col-xs-2 control-label">New Password</label>
+							<label class="col-xs-3 control-label">New Password</label>
 							<div class="col-xs-8">
 								<input id="new_password" name="new_password" type="password"
 									placeholder="New Password" class="form-control input-xs"
@@ -95,7 +115,7 @@
 						</div>
 						<div class="form-group"
 							data-ng-class="{'has-error':errors.confirm_password}">
-							<label class="col-xs-2 control-label">Confirm Password</label>
+							<label class="col-xs-3 control-label">Confirm Password</label>
 							<div class="col-xs-8">
 								<input id="confirm_password" name="confirm_password"
 									type="password" placeholder="Confirm Password"
@@ -118,7 +138,9 @@
 				</form>
 			</div>
 		</div>
-		<!-- <div class="row col-md-12"
+	</div>
+</div>
+<!-- <div class="row col-md-12"
 			data-ng-controller="AlertSubscriptionsController">
 			<div class="animated fadeIn alert alert-success text-center"
 				role="alert" data-ng-show="subscription_success">
@@ -154,5 +176,5 @@
 				</form>
 			</div>
 		</div> -->
-	</div>
+</div>
 </div>

@@ -1,10 +1,13 @@
-<div class="container">
-	<div data-ng-controller="UsersController" data-ng-init="logout()">
-		<div data-ng-class="{'fadeOutRight':fade}"
-			class="animated fadeInLeft alert alert-success text-center"
-			role="alert">
-			<strong>Goodbye!</strong> <span class="glyphicon glyphicon-thumbs-up"
-				aria-hidden="true"></span>
+<div class="col-md-10 text-center content-wrapper">
+	<!-- main -->
+	<div class="content">
+		<div class="main-content">
+			<header data-ng-controller="UsersController" data-ng-init="logout()"
+				class="animated fadeIn row alert alert-success text-center col-xs-4 col-xs-offset-4" data-ng-class="{'fadeOut':fade}"
+				role="alert">
+				<strong><span class="glyphicon glyphicon-thumbs-up"></span>
+					Goodbye!</strong>
+			</header>
 		</div>
 	</div>
 </div>
