@@ -7,37 +7,39 @@ app.controller('TemperatureController', function($scope, $interval) {
 	$scope.initOptions = function() {
 		$scope.options = {
 				chart: {
-					type: 'lineChart',
+					type: 'cumulativeLineChart',
 					height: 450,
 					margin : {
 						top: 20,
 						right: 20,
-						bottom: 40,
-						left: 55
+						bottom: 60,
+						left: 65
 					},
 					x: function(d){ return d[0]; },
-					y: function(d){ return d[1]; },
+					y: function(d){ return d[1]/100; },
+					average: function(d) { return d.mean/100; },
+
+					color: d3.scale.category10().range(),
+					transitionDuration: 300,
 					useInteractiveGuideline: true,
-					dispatch: {
-						stateChange: function(e){ console.log("stateChange"); },
-						changeState: function(e){ console.log("changeState"); },
-						tooltipShow: function(e){ console.log("tooltipShow"); },
-						tooltipHide: function(e){ console.log("tooltipHide"); }
-					},
+					clipVoronoi: false,
+
 					xAxis: {
-						axisLabel: 'Time (ms)'
-					},
-					yAxis: {
-						axisLabel: 'Voltage (v)',
-						tickFormat: function(d){
-							return d3.format('.02f')(d);
+						axisLabel: 'X Axis',
+						tickFormat: function(d) {
+							return d3.time.format('%m/%d/%y')(new Date(d))
 						},
-						axisLabelDistance: 30
+						showMaxMin: false,
+						staggerLabels: true
+					},
+
+					yAxis: {
+						axisLabel: 'Y Axis',
+						tickFormat: function(d){
+							return d3.format(',.1%')(d);
+						},
+						axisLabelDistance: 20
 					}
-				},
-				title: {
-					enable: true,
-					text: 'Temperature'
 				}
 		};
 	}

@@ -19,6 +19,14 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 		controller: 'DashboardController',
 		title: 'Weclome!'
 	})
+	.when('/eGuage/A', {
+		templateUrl: 'app/templates/charts/eguage_a.html',
+		title: 'eGuage A'
+	})
+	.when('/eGuage/B', {
+		templateUrl: 'app/templates/charts/eguage_b.html',
+		title: 'eGuage B'
+	})
 	.when('/Users', {
 		controller: 'UsersController',
 		templateUrl: 'app/templates/users/all.html',

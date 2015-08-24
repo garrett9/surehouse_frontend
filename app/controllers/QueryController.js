@@ -1,6 +1,6 @@
 app.controller('QueryController', function($scope, $timeout, $location, $localStorage, $routeParams, Query) {
 	
-	$scope.isCustom = true;
+	$scope.isCustom = false;
 	$scope.params = Query.init();
 	$scope.sortType = 'Time';
 	$scope.sortReverse = true;

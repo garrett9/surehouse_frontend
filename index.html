@@ -28,6 +28,7 @@
 <div data-ng-if="!$root.settings.resilient_mode">
 	<link rel="stylesheet" type="text/css" href="css/skins/darkblue.css">
 </div>
+<link rel="stylesheet" type="text/css" href="css/nv.d3.css">
 
 </head>
 <body class="dashboard font-size-16">
@@ -86,8 +87,11 @@
 							<i class="toggle-icon fa fa-angle-left"></i>
 					</a>
 						<ul class="sub-menu ">
-							<li><a href="#/Users/Manage"><span class="text"><i
-										class="fa fa-cloud"></i> Weather</span></a></li>
+							<li><a href="#/Query"><span class="text"><i class="fa fa-database"></i> Query</span></a></li>
+						</ul>
+						<ul class="sub-menu ">
+							<li><a href="#/eGuage/A"><span class="text"><i class="fa fa-area-chart"></i> eGuage A</a></span></li>
+							<li><a href="#/eGuage/B"><span class="text"><i class="fa fa-area-chart"></i> eGuage B</a></span></li>
 						</ul></li>
 					<li data-ng-show="!$root.authenticated"><a
 						href="#/Users/Login"><i class="fa fa-sign-in"></i><span
@@ -215,7 +219,7 @@
 	<script src="js/nv.d3.min.js"></script>
 	<script src="js/angular-nvd3.min.js"></script>
 
-	<script src="js/king/king-common.js"></script>
+	<script src="js/king/king-menu.js"></script>
 
 	<!-- The application -->
 	<script src="app/app.js"></script>

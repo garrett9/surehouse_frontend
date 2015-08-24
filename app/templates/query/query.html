@@ -1,18 +1,20 @@
-<!-- Section for displaying the query parameters -->
-<div class="container">
-	<div class="animated fadeInLeft">
-		<div id="error" class="animated fadeIn alert alert-danger text-center"
-			role="alert" data-ng-show="error">
-			<strong>{{ message }}</strong>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Query These Sensors</h3>
-					</div>
-					<div class="panel-body" data-ng-controller="SensorsController"
-						data-ng-init="loaded = false; all()">
+<div id="error"
+	class="col-md-10 animated fadeIn alert alert-success top-general-alert"
+	role="alert" data-ng-show="error">
+	<strong>{{ message }}</strong>
+</div>
+
+<div class="col-md-10 content-wrapper animated fadeIn">
+	<!-- main -->
+	<div class="content">
+		<div class="main-content">
+			<div class="widget">
+				<div class="widget-header">
+					<h3>Query These Sensors</h3>
+				</div>
+				<div class="widget-content" data-ng-controller="SensorsController"
+					data-ng-init="loading=false; all()">
+					<div class="row">
 						<div data-ng-if="loaded">
 							<label class="col-sm-4" data-ng-repeat="s in sensors"> <input
 								type="checkbox" name="checked[]"
@@ -27,207 +29,200 @@
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<!-- Time Parameters -->
-		<div class="row">
-			<div class="col-md-12">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Time Details</h3>
+	<div class="widget">
+		<div class="widget-header">
+			<h3>Time Details</h3>
+		</div>
+		<div class="widget-content">
+
+			<!-- Parameters for a Custom Query -->
+			<div class="animated fadeIn" data-ng-show="isCustom">
+
+				<!-- Query From time stamp -->
+				<div class="row form-group">
+					<label class="col-sm-2">Query From?</label>
+					<div class="col-sm-4">
+						<input type="date" id="fromDate" name="fromDate"
+							data-ng-model="params.fromDate" class="form-control input-xs">
 					</div>
-					<div class="panel-body">
+					<div class="col-sm-3">
+						<input type="time" id="fromTime" name="fromTime"
+							data-ng-model="params.fromTime" class="form-control input-xs">
+					</div>
+					<span class="col-sm-3 help-block">Any sensor log before this
+						time stamp will not be queried.</span>
+				</div>
 
-						<!-- Parameters for a Custom Query -->
-						<div class="animated fadeIn" data-ng-show="isCustom">
-
-							<!-- Query From time stamp -->
-							<div class="row form-group">
-								<label class="col-sm-2">Query From?</label>
-								<div class="col-sm-4">
-									<input type="date" id="fromDate" name="fromDate"
-										data-ng-model="params.fromDate" class="form-control input-xs">
-								</div>
-								<div class="col-sm-3">
-									<input type="time" id="fromTime" name="fromTime"
-										data-ng-model="params.fromTime" class="form-control input-xs">
-								</div>
-								<span class="col-sm-3 help-block">Any sensor log before
-									this time stamp will not be queried.</span>
-							</div>
-
-							<!-- Query To Timestamp -->
-							<div class="row form-group">
-								<label class="col-sm-2">Query To?</label>
-								<div class="col-sm-4">
-									<input type="date" id="toDate" name="toDate"
-										data-ng-model="params.toDate" class="form-control input-xs">
-								</div>
-								<div class="col-sm-3">
-									<input type="time" id="toTime" name="toTime"
-										data-ng-model="params.toTime" class="form-control input-xs">
-								</div>
-								<span class="col-sm-3 help-block">Any sensor log after
-									this time stamp will not be queried.</span>
-							</div>
-							<div class="row form-group">
-								<div class="col-sm-3">
-									<button type="button" class="btn btn-primary"
-										data-ng-click="isCustom = false">Switch to a Most
-										Recent Query</button>
-								</div>
-							</div>
-						</div>
-
-						<!-- Parameters for a Most Recent query -->
-						<div class="animated fadeIn" data-ng-show="!isCustom">
-							<div class="row form-group">
-								<label class="col-sm-2">Skip</label>
-								<div class="col-sm-3">
-									<input type="number" id="skip" name="skip"
-										data-ng-model="params.skip" class="form-control input-xs">
-								</div>
-								<span class="help-block">The number of minutes to skip
-									from the current time before data will be queried.</span>
-							</div>
-							<div class="row form-group">
-								<label class="col-sm-2">Minutes</label>
-								<div class="col-sm-3">
-									<input type="number" id="minutes" name="minutes"
-										data-ng-model="params.minutes" class="form-control input-xs">
-								</div>
-								<span class="help-block">The number of minutes from the
-									current time minus <strong>skip</strong> minutes to query data
-									for.
-								</span>
-							</div>
-							<div class="row from-group">
-								<div class="col-sm-3">
-									<button type="button" class="btn btn-primary"
-										data-ng-click="isCustom = true">Switch to a Custom
-										Query</button>
-								</div>
-							</div>
-						</div>
+				<!-- Query To Timestamp -->
+				<div class="row form-group">
+					<label class="col-sm-2">Query To?</label>
+					<div class="col-sm-4">
+						<input type="date" id="toDate" name="toDate"
+							data-ng-model="params.toDate" class="form-control input-xs">
+					</div>
+					<div class="col-sm-3">
+						<input type="time" id="toTime" name="toTime"
+							data-ng-model="params.toTime" class="form-control input-xs">
+					</div>
+					<span class="col-sm-3 help-block">Any sensor log after this
+						time stamp will not be queried.</span>
+				</div>
+				<div class="row form-group">
+					<div class="col-sm-3">
+						<button type="button" class="btn btn-primary"
+							data-ng-click="isCustom = false">Switch to a Most Recent
+							Query</button>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- Extra Parameters -->
-		<div class="row">
-			<div class="col-md-12">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Extra Parameters</h3>
+			<!-- Parameters for a Most Recent query -->
+			<div class="animated fadeIn" data-ng-show="!isCustom">
+				<div class="row form-group">
+					<label class="col-sm-2">Skip</label>
+					<div class="col-sm-3">
+						<input type="number" id="skip" name="skip"
+							data-ng-model="params.skip" class="form-control input-xs">
 					</div>
-					<div class="panel-body">
-						<div class="row form-group">
-							<label class="col-sm-2">Absolute values Only</label>
-							<div class="col-sm-4">
-								<input type="checkbox" id="absolute" name="absolute"
-									value="true" data-ng-model="params.absolute">
-							</div>
-							<span class="col-sm-6 help-block">When checked, only
-								absolute values of the queried data will be returned.</span>
-						</div>
-						<div class="row form-group">
-							<label class="col-sm-2">Aggregate</label>
-							<div class="col-sm-4">
-								<input type="number" id="aggregate" name="aggregate"
-									class="form-control input-xs" data-ng-model="params.aggregate">
-							</div>
-							<span class="col-sm-6 help-block">How many rows do you
-								want to return?</span>
-						</div>
-						<div class="row form-group">
-							<label class="col-sm-2">Rows</label>
-							<div class="col-sm-4">
-								<input type="number" id="rows" name="rows"
-									class="form-control input-xs" data-ng-model="params.rows">
-							</div>
-							<span class="col-sm-6 help-block">How many rows do you
-								want to return?</span>
-						</div>
-						<div class="row form-group">
-							<label class="col-sm-2">Order By</label>
-							<div class="col-sm-4">
-								<select id="order_by" name="order_by"
-									data-ng-model="params.order_by" class="form-control">
-									<option value="asc">Ascending</option>
-									<option value="desc">Descending</option>
-								</select>
-							</div>
-							<span class="col-sm-6 help-block">All time stamps will be
-								ordered by this value.</span>
-						</div>
-					</div>
+					<span class="help-block">The number of minutes to skip from
+						the current time before data will be queried.</span>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="from-group">
-				<div class="col-md-12">
-					<button id="query" type="button" class="btn btn-primary"
-						data-ng-click="query()">Query</button>
-					<button type="button" class="btn btn-success" data-toggle="modal"
-						data-target="#save_query">Save Query</button>
-					<button type="button" class="btn btn-default" data-toggle="modal"
-						data-target="#saved_queries" data-ng-click="getQueries()">Saved
-						Queries</button>
+				<div class="row form-group">
+					<label class="col-sm-2">Minutes</label>
+					<div class="col-sm-3">
+						<input type="number" id="minutes" name="minutes"
+							data-ng-model="params.minutes" class="form-control input-xs">
+					</div>
+					<span class="help-block">The number of minutes from the
+						current time minus <strong>skip</strong> minutes to query data
+						for.
+					</span>
+				</div>
+				<div class="row from-group">
+					<div class="col-sm-3">
+						<button type="button" class="btn btn-primary"
+							data-ng-click="isCustom = true">Switch to a Custom Query</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<!-- A Modal for saving the current query. -->
-	<div data-ng-include="'app/templates/query/save_query.html'"></div>
 
-	<!-- A modal for displaying the current queries. -->
-	<div class="modal fade" id="saved_queries">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title">My Queries</h4>
-				</div>
-				<div class="modal-body">
-					<table class="table table-striped" data-ng-if="queries">
-						<thead>
-							<tr>
-								<td class="text-bold">Query Name</td>
-								<td></td>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr data-ng-repeat="(key, value) in queries">
-								<td><a href="" data-ng-click="">{{ key }}</a><span
-									data-ng-show="show[key]">{{ key }}</span></td>
-								<td class="text-center">
-									<button type="button" class="btn btn-success btn-xs"
-										onclick="$('#saved_queries').modal('hide');"
-										data-ng-click="loadQuery(key)">Load</button>
-									<button type="button" class="btn btn-danger btn-xs"
-										data-ng-click="deleteQuery(key)">Delete</button>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<label class="text-center" data-ng-if="!queries">You
-						currently have no saved queries.</label>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
+	<div class="widget">
+		<div class="widget-header">
+			<h3>Extra Parameters</h3>
 		</div>
-		<!-- /.modal-dialog -->
+		<div class="widget-content">
+
+			<div class="row form-group">
+				<label class="col-sm-2">Absolute values Only</label>
+				<div class="col-sm-4">
+					<input type="checkbox" id="absolute" name="absolute" value="true"
+						data-ng-model="params.absolute">
+				</div>
+				<span class="col-sm-6 help-block">When checked, only absolute
+					values of the queried data will be returned.</span>
+			</div>
+			<div class="row form-group">
+				<label class="col-sm-2">Aggregate</label>
+				<div class="col-sm-4">
+					<input type="number" id="aggregate" name="aggregate"
+						class="form-control input-xs" data-ng-model="params.aggregate">
+				</div>
+				<span class="col-sm-6 help-block">How many rows do you want
+					to return?</span>
+			</div>
+			<div class="row form-group">
+				<label class="col-sm-2">Rows</label>
+				<div class="col-sm-4">
+					<input type="number" id="rows" name="rows"
+						class="form-control input-xs" data-ng-model="params.rows">
+				</div>
+				<span class="col-sm-6 help-block">How many rows do you want
+					to return?</span>
+			</div>
+			<div class="row form-group">
+				<label class="col-sm-2">Order By</label>
+				<div class="col-sm-4">
+					<select id="order_by" name="order_by"
+						data-ng-model="params.order_by" class="form-control">
+						<option value="asc">Ascending</option>
+						<option value="desc">Descending</option>
+					</select>
+				</div>
+				<span class="col-sm-6 help-block">All time stamps will be
+					ordered by this value.</span>
+			</div>
+		</div>
 	</div>
-	<!-- /.modal -->
+
+	<div class="row">
+		<div class="from-group">
+			<div class="col-md-12">
+				<button id="query" type="button" class="btn btn-primary"
+					data-ng-click="query()">Query</button>
+				<button type="button" class="btn btn-success" data-toggle="modal"
+					data-target="#save_query">Save Query</button>
+				<button type="button" class="btn btn-default" data-toggle="modal"
+					data-target="#saved_queries" data-ng-click="getQueries()">Saved
+					Queries</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- A Modal for saving the current query. -->
+<div data-ng-include="'app/templates/query/save_query.html'"></div>
+
+<!-- A modal for displaying the current queries. -->
+<div class="modal fade" id="saved_queries">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">My Queries</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-striped" data-ng-if="queries">
+					<thead>
+						<tr>
+							<td class="text-bold">Query Name</td>
+							<td></td>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr data-ng-repeat="(key, value) in queries">
+							<td><a href="" data-ng-click="">{{ key }}</a><span
+								data-ng-show="show[key]">{{ key }}</span></td>
+							<td class="text-center">
+								<button type="button" class="btn btn-success btn-xs"
+									onclick="$('#saved_queries').modal('hide');"
+									data-ng-click="loadQuery(key)">Load</button>
+								<button type="button" class="btn btn-danger btn-xs"
+									data-ng-click="deleteQuery(key)">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<label class="text-center" data-ng-if="!queries">You
+					currently have no saved queries.</label>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 </div>
 
 <script>
