@@ -1,62 +1,34 @@
 /**
- * A controller for managing the temperature chart.
+ * A controller for managing the Engery Pie Chart
  */
-app.controller('HvacController', function($scope, $interval) {
+app.controller('TemperatureController', function($scope, $interval, Charter, Query, REFRESH) {
+	var options_initialized = false;
+	var params = {
+		sensors: ['T_LIVING']
+	};
 
-	// Initialize the options for displaying the chart
-	$scope.initOptions = function() {
-		$scope.options = {
-				chart: {
-					type: 'discreteBarChart',
-					height: 450,
-					margin : {
-						top: 20,
-						right: 20,
-						bottom: 60,
-						left: 55
-					},
-					x: function(d){return d.label;},
-					y: function(d){return d.value;},
-					showValues: true,
-					valueFormat: function(d){
-						return d3.format(',.1f')(d);
-					},
-					transitionDuration: 500,
-					yAxis: {
-						axisLabel: 'Y Axis',
-						axisLabelDistance: 30
-					}
-				}
-		};
-	}
+	// Watch the period paremter
+	$scope.$watch('period', function() {
+		$scope.getData();
+		options_initialized = false;
+		Query.addAggregate(params, $scope.period);
+	})
 
 	// Retrieve the data to display in the chart
 	$scope.getData = function() {
-		$scope.data = [
-		               {
-		            	   key: "Cumulative Return",
-		            	   values: [
-		            	            {
-		            	            	"label" : "Today" ,
-		            	            	"value" : 1.2
-		            	            } ,
-		            	            {
-		            	            	"label" : "Yesterday" ,
-		            	            	"value" : 0.9
-		            	            } ,
-		            	            {
-		            	            	"label" : "Balance" ,
-		            	            	"value" : 1.3
-		            	            }
-		            	            ]
-		               }
-		               ];
+		if($scope.period) {
+			Charter.query(params, $scope.period, function(data, units) {
+				$scope.data = data;
+				$scope.updated = new Date();
+
+				if(!options_initialized) {
+					$scope.options = Charter.initLineChartOptions(units, $scope.period);
+					options_initialized = true;
+				}
+			});
+		}
 	}
 
-	// Initialize the chart
-	$scope.initChart = function() {
-		$scope.initOptions();
-		$scope.getData();
-	}
-
+	// Request for new data every minute
+	$interval($scope.getData, REFRESH);
 });

@@ -1,0 +1,9 @@
+/**
+ * Apply constants for the web app's domain, and the REST API domain.
+ *
+ * After making your edits to this file, rename it to 'config.js'
+ */
+app.constant('URLS', {
+	BASE: 'APPLICATION DOMAIN NAME GOES HERE',
+	API: 'APPLICATION REST API GOES HERE'
+});

@@ -323,7 +323,9 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
  * validate the token. If it is validated, the user continues as normal. If it's
  * not valid, then the user will be redirected to the login page.
  */
-app.run(function($localStorage, $route, $rootScope, $interval, Settings, URLS) {
+app.run(function($localStorage, $route, $rootScope, $interval, Settings, URLS, PERIODS, REFRESH) {
+	$rootScope.PERIODS = PERIODS;
+	
 	if($localStorage.token)
 		$rootScope.authenticated = true;
 	else
@@ -370,7 +372,7 @@ app.run(function($localStorage, $route, $rootScope, $interval, Settings, URLS) {
 	// Get the settings of the application
 	$rootScope.getSettings = function() {
 		// Get the settings of the application every minute
-		$interval(getSettings, 1000 * 60);
+		$interval(getSettings, REFRESH);
 	}
 	$rootScope.settings = {};
 	getSettings();
