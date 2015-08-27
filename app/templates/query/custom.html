@@ -4,7 +4,14 @@
 	<!-- main -->
 	<div class="content">
 		<div class="main-content">
-
+			<div data-ng-if="chart && payload.length > 0" class="widget animated fadeIn" data-ng-controller="ChartController">
+				<div class="widget-header">
+					<h3>Chart Results</h3>
+				</div>
+				<div class="widget-content" data-ng-init="loadData(chart, $parent.payload)">
+					<nvd3 options="options" data="data"></nvd3>
+				</div>
+			</div>
 			<div class="widget animated fadeIn">
 				<div class="widget-header">
 					<h3>Results</h3>

@@ -1,7 +1,15 @@
 /**
  * A simple controller for displaying dashboard information.
  */
-app.controller('DashboardController', function($scope, $interval) {
+app.controller('DashboardController', function($scope, $interval, Query, REFRESH) {
+	
+	Query.recentPost({
+		sensors: ['T_LIVING'],
+		minutes: 5
+	}, function(res) {
+		for(var name in res.payload)
+			$scope.temperature = res.payload[name];
+	});
 	
 	var timeOfDay = function() {
 		var hours = $scope.date.getHours();

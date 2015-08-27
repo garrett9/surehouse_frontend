@@ -3,23 +3,25 @@
 	<div class="col-xs-8">
 		<input id="name" name="name" type="text" placeholder="Alert Name"
 			class="form-control" data-ng-model="$parent.alert.name" required>
-		<div class="help-block">
-			The alert's unique name to display within the web application.
-		</div>
+		<div class="help-block">The alert's unique name to display
+			within the web application.</div>
 	</div>
 </div>
-<div class="form-group" data-ng-controller="SensorsController" data-ng-init="all()">
+<div class="form-group" data-ng-controller="SensorsController"
+	data-ng-init="all()">
 	<label class="col-xs-2 control-label">Sensor</label>
 	<div class="col-xs-6">
 		<select id="sensor" name="sensor" class="form-control"
-			data-ng-model="$parent.$parent.alert.sensor" data-ng-options="s.id as s.name for s in sensors" required>
+			data-ng-model="$parent.$parent.alert.sensor"
+			data-ng-options="s.id as s.name for s in sensors" required>
 			<option value="" selected>Please select a Sensor</option>
 		</select>
 		<div class="help-block">
-			The sensor that the alert will be monitoring.<br>
-			<span data-ng-if="sensors.length == 0"><strong>There are currently
-					no sensors in the system. Click <a href="#/Sensors/Create" target="_blank">here</a>
-					to create a new one, and then refresh the drop down list.
+			The sensor that the alert will be monitoring.<br> <span
+				data-ng-if="sensors.length == 0"><strong>There are
+					currently no sensors in the system. Click <a
+					href="#/Sensors/Create" target="_blank">here</a> to create a new
+					one, and then refresh the drop down list.
 			</strong></span>
 		</div>
 	</div>
@@ -37,9 +39,8 @@
 			<option value="<=">{{operationText('<=')}}</option>
 			<option value=">=">{{operationText('>=')}}</option>
 		</select>
-		<div class="help-block">
-			The operation used to compare the selected sensor's value against
-			your specified value. {{o.operation}}
+		<div class="help-block">The operation used to compare the
+			selected sensor's value against your specified value. {{o.operation}}
 		</div>
 	</div>
 </div>
@@ -48,11 +49,9 @@
 	<div class="col-xs-6">
 		<input id="value" name="value" type="number" placeholder="Value"
 			class="form-control" data-ng-model="$parent.alert.value" required>
-		<div class="help-block">
-			If the condition of comparing the selected sensor's value against
-			this value using the specified operation is met, then this alert will
-			be triggered.
-		</div>
+		<div class="help-block">If the condition of comparing the
+			selected sensor's value against this value using the specified
+			operation is met, then this alert will be triggered.</div>
 	</div>
 </div>
 <div class="form-group">
@@ -60,10 +59,20 @@
 	<div class="col-xs-6">
 		<input id="value" name="value" type="number" placeholder="Timespan"
 			class="form-control" data-ng-model="$parent.alert.timespan" required>
-		<div class="help-block">
-			If the condition of comparing the selected sensor's value against the
-			previoulsy entered value using the specified operation is met for the
-			provided number of minutes, then this alert will be triggered.
-		</div>
+		<div class="help-block">If the condition of comparing the
+			selected sensor's value against the previoulsy entered value using
+			the specified operation is met for the provided number of minutes,
+			then this alert will be triggered.</div>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-xs-2 control-label" for="resilient_trigger">Triggers
+		Resilient Mode</label>
+	<div class="col-xs-6">
+		<input id="resilient_trigger" type="checkbox"
+			data-ng-model="$parent.alert.resilient_trigger" data-ng-true-value="1" data-ng-false-value="0"/>
+		<div class="help-block">When checked, and if this alert is met,
+			then it will set the entire system in Resilient mode. Sustianability
+			mode will be restored once the alert is no longer met.</div>
 	</div>
 </div>

@@ -32,6 +32,9 @@
 
 </head>
 <body class="dashboard font-size-16">
+
+	<div data-ng-if="$root.focusOn" id="focus-overlay" style=""></div>
+
 	<div class="wrapper">
 		<!-- TOP BAR -->
 		<div class="top-bar">
@@ -46,25 +49,58 @@
 					<!-- end logo -->
 					<div class="col-md-10">
 						<div class="row">
-							<div class="col-md-3">
+							<div class="col-md-5">
+								<div
+									data-ng-show="$root.activatedAlerts && $root.activatedAlerts.length > 0"></div>
+								<div class="notifications">
+									<ul>
+										<!-- notification: general -->
+										<li class="notification-item general">
+											<div class="btn-group">
+												<a href="" class="dropdown-toggle" data-toggle="dropdown">
+													<i class="fa fa-bell"></i><span class="count"
+													data-ng-bind="$root.activatedAlerts.length"></span> <span
+													class="circle"></span>
+												</a>
+												<ul class="dropdown-menu" role="menu">
+													<li class="notification-header"><em>{{$root.activatedAlerts.length}}
+															alert(s) are currently activated!</em></li>
+													<li data-ng-repeat="alert in $root.activatedAlerts"><a
+														href=""><i class="fa fa-warning"
+															data-ng-class="{'yellow-font': !alert.resilient_trigger, 'red-font': alert.resilient_trigger}"></i>
+															<span class="text"
+															data-ng-class="{'yellow-font': !alert.resilient_trigger, 'red-font': alert.resilient_trigger}">The
+																<strong>{{alert.name}}</strong> alert has been activated
+																with a<br> <strong>{{alert.sensor_name}}</strong>
+																value <strong>{{operationText(alert.operation.toLowerCase())}}</strong>
+																<strong>{{alert.value}}</strong> <strong>{{alert.sensor_units}}</strong>!
+														</span></a></li>
+												</ul>
+											</div>
+										</li>
+										<!-- end notification: general -->
+									</ul>
+								</div>
+
 								<!-- search box -->
-								<div id="tour-searchbox" class="input-group searchbox">
+								<div class="input-group searchbox">
 									<input type="search" class="form-control"
-										placeholder="enter keyword here..."> <span
+										placeholder="Search for a widget..."> <span
 										class="input-group-btn">
 										<button class="btn btn-default" type="button">
 											<i class="fa fa-search"></i>
 										</button>
 									</span>
 								</div>
-								<!-- end search box -->
-								<div class="col-md-9">
-									<div class="top-bar-right">
-										<!-- responsive menu bar icon -->
-										<a href="#" class="hidden-md hidden-lg main-nav-toggle"><i
-											class="fa fa-bars"></i></a>
-										<!-- end responsive menu bar icon -->
-									</div>
+
+							</div>
+							<!-- end search box -->
+							<div class="col-md-7">
+								<div class="top-bar-right">
+									<!-- responsive menu bar icon -->
+									<a href="" class="hidden-md hidden-lg main-nav-toggle"><i
+										class="fa fa-bars"></i></a>
+									<!-- end responsive menu bar icon -->
 								</div>
 							</div>
 						</div>
@@ -87,11 +123,14 @@
 							<i class="toggle-icon fa fa-angle-left"></i>
 					</a>
 						<ul class="sub-menu ">
-							<li><a href="#/Query"><span class="text"><i class="fa fa-database"></i> Query</span></a></li>
+							<li><a href="#/Query"><span class="text"><i
+										class="fa fa-database"></i> Query</span></a></li>
 						</ul>
 						<ul class="sub-menu ">
-							<li><a href="#/eGuage/A"><span class="text"><i class="fa fa-area-chart"></i> eGuage A</a></span></li>
-							<li><a href="#/eGuage/B"><span class="text"><i class="fa fa-area-chart"></i> eGuage B</a></span></li>
+							<li><a href="#/eGuage/A"><span class="text"><i
+										class="fa fa-area-chart"></i> eGuage A</a></span></li>
+							<li><a href="#/eGuage/B"><span class="text"><i
+										class="fa fa-area-chart"></i> eGuage B</a></span></li>
 						</ul></li>
 					<li data-ng-show="!$root.authenticated"><a
 						href="#/Users/Login"><i class="fa fa-sign-in"></i><span
@@ -129,16 +168,20 @@
 				<i class="fa fa-angle-left"></i>
 			</div>
 			<div class="sidebar-content" data-ng-if="$root.authenticated">
-				<div class="widget animated fadeIn">
+				<div class="widget animated fadeIn widget-focus-enabled">
 					<div class="widget-header">
-						Settings
+						<h3>
+							<i class="fa fa-cogs"></i> Home Settings
+						</h3>
 						<div class="btn-group widget-header-toolbar">
-							<a href="#" title="Expand/Collapse"
+							<a href="" title="Expand/Collapse"
+								data-ng-init="$parent.collapse=false"
+								data-ng-click="$parent.collapse=!$parent.collapse"
 								class="btn-borderless btn-toggle-expand"><i
-								class="fa fa-chevron-up"></i></a>
+								class="fa fa-chevron-{{($parent.collapse) ? 'down' : 'up'}}"></i></a>
 						</div>
 					</div>
-					<div class="widget-content text-center">
+					<div class="widget-content text-center" data-ng-show="!collapse">
 						<div class="animated fadeIn"
 							data-ng-show="$root.settings.resilient_mode">
 							<button type="button" class="btn btn-primary"
@@ -155,14 +198,17 @@
 						<form class="form-horizontal" data-ng-submit="$root.setAddress()">
 							<fieldset data-ng-disabled="loading">
 								<div class="col-md-12">
-									<div class="alert alert-success" data-ng-show="$root.settings.success">
+									<div class="alert alert-success"
+										data-ng-show="$root.settings.success">
 										Successfully saved your changes.
 										<button type="button" class="close"
 											data-ng-click="$root.settings.success=null">&times;</button>
 									</div>
-									<div class="alert alert-danger" data-ng-show="$root.settings.error">
+									<div class="alert alert-danger"
+										data-ng-show="$root.settings.error">
 										Failed to save your changes.
-										<button type="button" class="close" data-ng-click="$root.settings.error=null">&times;</button>
+										<button type="button" class="close"
+											data-ng-click="$root.settings.error=null">&times;</button>
 									</div>
 								</div>
 								<legend>Home Address</legend>
@@ -192,7 +238,7 @@
 		<p class="row animated fadeInRight text-center">SURE HOUSE
 			Dashboard | Copyright &copy; 2014</p>
 	</div> -->
-	
+
 	<!-- FOOTER -->
 	<!-- <footer class="footer">
 		<p class="row animated fadeIn text-center">SURE HOUSE
@@ -218,7 +264,6 @@
 	<script src="js/d3.min.js"></script>
 	<script src="js/nv.d3.min.js"></script>
 	<script src="js/angular-nvd3.min.js"></script>
-
 	<script src="js/king/king-menu.js"></script>
 
 	<!-- The application -->
@@ -226,9 +271,10 @@
 
 	<!-- Configurations -->
 	<script src="app/config.js"></script>
-	
+
 	<!-- Constants -->
 	<script src="app/constants.js"></script>
+	<script src="app/charts.js"></script>
 
 	<!-- Directives -->
 	<script src="app/directives/errors.js"></script>
@@ -253,8 +299,6 @@
 	<script src="app/controllers/AlertSubscriptionsController.js"></script>
 	<script src="app/controllers/QueryController.js"></script>
 	<script src="app/controllers/DashboardController.js"></script>
-	<script src="app/controllers/TemperatureController.js"></script>
-	<script src="app/controllers/EnergyController.js"></script>
-	<script src="app/controllers/HvacController.js"></script>
+	<script src="app/controllers/ChartController.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <!-- main -->
-<div class="col-md-10 content-wrapper animated fadeIn">
+<div class="col-md-10 content-wrapper fadeIn"
+	data-ng-class="{'animated': !$root.focusOn}">
 	<div class="content">
 		<div class="main-header">
 			<h2>SureHouse Dashboard</h2>
@@ -10,11 +11,18 @@
 			<div class="row">
 				<div class="col-md-8">
 					<!-- WIDGET REMINDER -->
-					<div class="widget">
+					<div class="widget" data-ng-if="true">
 						<div class="widget-header">
 							<h3>Status</h3>
+							<div class="btn-group widget-header-toolbar">
+							<a href="" title="Expand/Collapse"
+								data-ng-init="collapse=false"
+								data-ng-click="collapse=!collapse"
+								class="btn-borderless btn-toggle-expand"><i
+								class="fa fa-chevron-{{(collapse) ? 'down' : 'up'}}"></i></a>
 						</div>
-						<div class="widget-content">
+						</div>
+						<div class="widget-content" data-ng-show="!collapse">
 							<div class="animated fadeIn text-center"
 								data-ng-show="$root.settings.resilient_mode">
 								<img class="img-responsive"
@@ -37,14 +45,17 @@
 						<div class="widget-header hide">
 							<h3>Status</h3>
 						</div>
-						<div class="widget-content" data-ng-class="{'sustainable': !$root.settings.resilient_mode, 'resilient': $root.settings.resilient_mode}">
+						<div class="widget-content"
+							data-ng-class="{'sustainable': !$root.settings.resilient_mode, 'resilient': $root.settings.resilient_mode}">
 							<div class="today-reminder">
-								<h3 class="reminder-title">Today's Report</h3>
+								<div class="reminder-title">
+									<h3>Today's Report</h3>
+								</div>
 								<p class="reminder-time">
 									<i class="fa fa-clock-o"></i> {{date | date:'short'}}
 								</p>
-								<p class="reminder-place">
-									<i class="wi wi-thermometer"></i> 78&deg; F
+								<p class="reminder-place" data-ng-if="temperature">
+									<i class="wi wi-thermometer"></i> {{temperature}}&deg; F
 								</p>
 								<i class="wi {{weather_icon}}" style="animation: none;"></i> <em
 									class="reminder-notes">{{$root.settings.address}}</em>
@@ -55,72 +66,91 @@
 				</div>
 			</div>
 
-			<!-- WIDGET MAIN CHART WITH TABBED CONTENT -->
-			<div class="widget">
-				<div class="widget-header">
-					<h3>
-						<i class="wi wi-thermometer"></i> Temperature
-					</h3>
-					<em>- Outdoor Temp, Indoor Avg, Indoor Max, and Indoor Min</em>
-					<div class="btn-group widget-header-toolbar">
-						<a href="#" id="tour-focus" title="Focus"
-							class="btn-borderless btn-focus"><i class="fa fa-eye"></i></a> <a
-							href="#" title="Expand/Collapse"
-							class="btn-borderless btn-toggle-expand"></a><a href="#"
-							title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i
-							class="fa fa-chevron-up"></i></a>
-					</div>
-				</div>
-				<div class="widget-content"
-					data-ng-controller="TemperatureController">
-					<div data-ng-include="'app/templates/charts/chart_template.html'"></div>
-				</div>
-			</div>
-			<!-- END WIDGET MAIN CHART WITH TABBED CONTENT -->
-
-			<div class="row">
-				<div class="col-md-6">
-					<!-- WIDGET TABLE -->
-					<div class="widget widget-table">
-						<div class="widget-header">
-							<h3>
-								<i class="fa fa-plug"></i> Energy
-							</h3>
-							<div class="btn-group widget-header-toolbar">
-								<a href="#" title="Focus" class="btn-borderless btn-focus"><i
-									class="fa fa-eye"></i></a> <a href="#" title="Expand/Collapse"
-									class="btn-borderless btn-toggle-expand"><i
-									class="fa fa-chevron-up"></i></a>
+			<!-- Begin automatically generated charts. -->
+			<div data-ng-repeat="(i, row) in CHARTS">
+				<div class="row">
+					<div data-ng-repeat="(j, chart) in row">
+						<div class="col-md-{{chart.size}}">
+							<div class="widget"
+								data-ng-class="{'widget-focus-enabled': focusOnWidget}"
+								data-ng-controller="ChartController">
+								<div class="widget-header">
+									<h3>
+										<span data-ng-if="chart.icon"> <i
+											class="{{chart.icon}}"></i>
+										</span> {{chart.title}}
+									</h3>
+									<span data-ng-if="chart.description"> <em>-
+											{{chart.description}}</em>
+									</span>
+									<div data-ng-if="!chart.dontShowToolbar"
+										class="btn-group widget-header-toolbar">
+										<span class="label label-success" data-ng-show="updated">Last
+											Updated: <strong>{{updated | date:'shortTime'}}</strong>
+										</span><a href="" id="tour-focus" title="Focus"
+											data-ng-click="$root.focusOn=!$root.focusOn; $parent.focusOnWidget=!$parent.focusOnWidget"
+											class="btn-borderless btn-focus"><i class="fa fa-eye{{($parent.focusOnWidget) ? '-slash' : ''}}"></i></a>
+										<a href="" title="Expand/Collapse"
+											data-ng-init="$parent.collapse=false"
+											data-ng-click="$parent.collapse=!$parent.collapse"
+											class="btn-borderless btn-toggle-expand"><i
+											class="fa fa-chevron-{{($parent.collapse) ? 'down' : 'up'}}"></i></a>
+									</div>
+								</div>
+								<div class="widget-content" data-ng-show="!collapse"
+									data-ng-init="init(chart.type, chart.params, chart.period, chart.beforeRender)">
+									<div data-ng-if="!chart.dontShowPeriods" class="chart-nav">
+										<strong>Select period: </strong>
+										<ul id="sales-stat-tab">
+											<li
+												data-ng-class="{'active': $parent.period==$root.PERIODS.TODAY}"><a
+												href="" data-ng-click="$parent.period=$root.PERIODS.TODAY">Today</a></li>
+											<li
+												data-ng-class="{'active': $parent.period==$root.PERIODS.YESTERDAY}"><a
+												href=""
+												data-ng-click="$parent.period=$root.PERIODS.YESTERDAY">Yesterday</a></li>
+											<li
+												data-ng-class="{'active': $parent.period==$root.PERIODS.THIS_WEEK}"><a
+												href=""
+												data-ng-click="$parent.period=$root.PERIODS.THIS_WEEK">This
+													Week</a></li>
+											<li
+												data-ng-class="{'active': $parent.period==$root.PERIODS.LAST_WEEK}"><a
+												href=""
+												data-ng-click="$parent.period=$root.PERIODS.LAST_WEEK">Last
+													Week</a></li>
+											<li
+												data-ng-class="{'active': period==$root.PERIODS.THIS_MONTH}"><a
+												href=""
+												data-ng-click="$parent.period=$root.PERIODS.THIS_MONTH">This
+													Month</a></li>
+											<li
+												data-ng-class="{'active': period==$root.PERIODS.LAST_MONTH}"><a
+												href=""
+												data-ng-click="$parent.period=$root.PERIODS.LAST_MONTH">Last
+													Month</a></li>
+										</ul>
+									</div>
+									<div class="chart-nav" data-ng-if="chart.allowTypeSelection">
+										<strong>Select Chart Type: </strong>
+										<ul id="sales-stat-tab">
+											<li data-ng-class="{'active': $parent.type==$root.TYPES.PIE}"><a
+												href="" data-ng-click="$parent.type=$root.TYPES.PIE">Pie</a></li>
+											<li
+												data-ng-class="{'active': $parent.type==$root.TYPES.LINE}"><a
+												href="" data-ng-click="$parent.type=$root.TYPES.LINE">Line</a></li>
+											<li data-ng-class="{'active': $parent.type==$root.TYPES.BAR}"><a
+												href="" data-ng-click="$parent.type=$root.TYPES.BAR">Bar</a></li>
+										</ul>
+									</div>
+									<nvd3 options="options" data="data"></nvd3>
+								</div>
 							</div>
 						</div>
-						<div class="widget-content" data-ng-controller="EnergyController">
-							<div data-ng-include="'app/templates/charts/chart_template.html'"></div>
-						</div>
-					</div>
-					<!-- END WIDGET TABLE -->
-				</div>
-				
-				<div class="col-md-6">
-					<div class="widget">
-						<div class="widget-header">
-							<h3>Energy for HVAC System</h3>
-							<div class="btn-group widget-header-toolbar">
-								<a href="#" title="Focus" class="btn-borderless btn-focus"><i
-									class="fa fa-eye"></i></a> <a href="#" title="Expand/Collapse"
-									class="btn-borderless btn-toggle-expand"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-						</div>
-						<div class="widget-content" data-ng-controller="HvacController">
-							<div data-ng-include="'app/templates/charts/chart_template.html'"></div>
-						</div>
 					</div>
 				</div>
-				<!-- /main-content -->
 			</div>
-			<!-- /main -->
+			<!-- End automatically generated charts. -->
 		</div>
 	</div>
 </div>
-
-<script src="js/king/king-common.js"></script>

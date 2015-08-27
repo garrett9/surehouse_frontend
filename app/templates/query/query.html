@@ -45,11 +45,11 @@
 					<label class="col-sm-2">Query From?</label>
 					<div class="col-sm-4">
 						<input type="date" id="fromDate" name="fromDate"
-							data-ng-model="params.fromDate" class="form-control input-xs">
+							data-ng-model="params.fromDateObj" class="form-control input-xs">
 					</div>
 					<div class="col-sm-3">
 						<input type="time" id="fromTime" name="fromTime"
-							data-ng-model="params.fromTime" class="form-control input-xs">
+							data-ng-model="params.fromTimeObj" class="form-control input-xs">
 					</div>
 					<span class="col-sm-3 help-block">Any sensor log before this
 						time stamp will not be queried.</span>
@@ -60,11 +60,11 @@
 					<label class="col-sm-2">Query To?</label>
 					<div class="col-sm-4">
 						<input type="date" id="toDate" name="toDate"
-							data-ng-model="params.toDate" class="form-control input-xs">
+							data-ng-model="params.toDateObj" class="form-control input-xs">
 					</div>
 					<div class="col-sm-3">
 						<input type="time" id="toTime" name="toTime"
-							data-ng-model="params.toTime" class="form-control input-xs">
+							data-ng-model="params.toTimeObj" class="form-control input-xs">
 					</div>
 					<span class="col-sm-3 help-block">Any sensor log after this
 						time stamp will not be queried.</span>
@@ -155,6 +155,18 @@
 				</div>
 				<span class="col-sm-6 help-block">All time stamps will be
 					ordered by this value.</span>
+			</div>
+			<div class="row form-group">
+				<label class="col-sm-2">Display Chart?</label>
+				<div class="col-sm-10">
+					<label> <input type="radio" data-ng-model="params.chart"
+						value="{{$root.TYPES.PIE}}"> Pie
+					</label><br /> <label> <input type="radio" data-ng-model="params.chart"
+						value="{{$root.TYPES.BAR}}"> Bar
+					</label><br /> <label> <input type="radio" data-ng-model="params.chart"
+						value="{{$root.TYPES.LINE}}"> Line
+					</label><br />
+				</div>
 			</div>
 		</div>
 	</div>

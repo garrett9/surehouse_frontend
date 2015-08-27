@@ -3,20 +3,6 @@
  */
 app.controller('AlertsController', function($scope, $location, $timeout, $routeParams, Alert) {
 	
-	// Return the text representation of the operation the alert has.
-	$scope.operationText = function(operation) {
-		switch(operation) {
-		case '<':
-			return "less than";
-		case '>':
-			return "greater than";
-		case '<=':
-			return "less than or equal to";
-		case '>=':
-			return "greater than or equal to";
-		}
-	}
-	
 	// Get all alerts in the system.
 	$scope.all = function() {
 		$scope.n = $routeParams.n;

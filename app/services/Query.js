@@ -59,10 +59,22 @@ app.factory('Query', function(API, PERIODS) {
 					return addParameters({
 						minutes: (date.getDay() * 24 * 60) + todaysMinutes
 					});
+				case PERIODS.LAST_WEEK:
+					return addParameters({
+						skip: (date.getDay() * 24 * 60) + todaysMinutes,
+						minutes: 7 * 24 * 60
+					});
+					break;
 				case PERIODS.THIS_MONTH:
 					// Add the number of minutes that occured for the previous days of the month, and then todays minutes
 					return addParameters({
 						minutes: ((date.getDate() - 1) * 24 * 60) + todaysMinutes
+					});
+				case PERIODS.LAST_MONTH:
+					// Skip the number of minutes that occurned this month, and then add the minutes for the 30 days beyond that
+					return addParameters({
+						skip: ((date.getDate() - 1) * 24 * 60) + todaysMinutes,
+						minutes: 30 * 24 * 60
 					});
 				default: // Invalid period, so just return back the original parameters
 					return parameters;

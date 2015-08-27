@@ -199,8 +199,10 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
 					}
 				}
 			} 
-			else if(!toServer && isFinite(value)) {
-				input[key] = parseInt(value);
+			else if(isFinite(value)) {
+				var val = parseInt(value);
+				if(!isNaN(val))
+					input[key] = val;
 			}
 			else if (angular.isObject(value) || angular.isArray(value)) {
 				// Recurse into object
@@ -323,8 +325,10 @@ app.config(function configure($routeProvider, $httpProvider, laddaProvider) {
  * validate the token. If it is validated, the user continues as normal. If it's
  * not valid, then the user will be redirected to the login page.
  */
-app.run(function($localStorage, $route, $rootScope, $interval, Settings, URLS, PERIODS, REFRESH) {
+app.run(function($localStorage, $route, $rootScope, $interval, Settings, Alert, URLS, PERIODS, REFRESH, CHARTS, TYPES) {
 	$rootScope.PERIODS = PERIODS;
+	$rootScope.CHARTS = CHARTS;
+	$rootScope.TYPES = TYPES;
 	
 	if($localStorage.token)
 		$rootScope.authenticated = true;
@@ -362,6 +366,7 @@ app.run(function($localStorage, $route, $rootScope, $interval, Settings, URLS, P
 		});
 	}
 
+	// Get the settings for the application
 	var getSettings = function() {
 		Settings.getSettings(function(res) {
 			$rootScope.settings.address = res.payload.address;
@@ -369,12 +374,36 @@ app.run(function($localStorage, $route, $rootScope, $interval, Settings, URLS, P
 		});
 	}
 	
+	// Return the text representation of the operation an alert has
+	$rootScope.operationText = function(operation) {
+		switch(operation) {
+		case '<':
+			return "Less Than";
+		case '>':
+			return "Greater Than";
+		case '<=':
+			return "Less Than or Equal To";
+		case '>=':
+			return "Greater Than or Equal To";
+		}
+	}
+	
+	// Get any activated alerts for the application
+	var getActivatedAlerts = function() {
+		Alert.activated(function(res) {
+			$rootScope.activatedAlerts = res.payload;
+		});
+	}
+	
 	// Get the settings of the application
-	$rootScope.getSettings = function() {
+	var setIntervals = function() {
 		// Get the settings of the application every minute
 		$interval(getSettings, REFRESH);
+		$interval(getActivatedAlerts, REFRESH);
 	}
+	
 	$rootScope.settings = {};
 	getSettings();
-	$rootScope.getSettings();
+	getActivatedAlerts();
+	setIntervals();
 });

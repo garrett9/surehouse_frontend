@@ -97,10 +97,38 @@ app.controller('QueryController', function($scope, $timeout, $location, $localSt
 	$scope.query = function() {
 		var params;
 		if($.isArray($scope.params['sensors[]']) && $scope.params['sensors[]'].length > 0) {
-			console.log($scope.params);
 			$scope.error = false;
-			if($scope.isCustom)
+			if($scope.isCustom) {
+				// Format a date to be Y-m-d
+				var formatDate = function(date) {
+					return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+				}
+				
+				// Format a time to be H:i
+				var formatTime = function(date) {
+					return date.getHours() + ':' + date.getMinutes();
+				}
+
+				if($scope.params.toDateObj) {
+					$scope.params.toDate = formatDate($scope.params.toDateObj);
+					delete $scope.params.toDateObj;
+				}
+				if($scope.params.toTimeObj) {
+					$scope.params.toTime = formatTime($scope.params.toTimeObj);
+					delete $scope.params.toTimeObj;
+				}
+				if($scope.params.fromDateObj) {
+					$scope.params.fromDate = formatDate($scope.params.fromDateObj);
+					delete $scope.params.fromDateObj;
+				}
+				if($scope.params.fromTimeObj) {
+					$scope.params.fromTime = formatTime($scope.params.fromTimeObj);
+					delete $scope.params.fromTimeObj;
+				}
+				
+				$scope.params.isCustom = true;
 				$location.path('/Query/Custom').search($scope.params);
+			}
 			else
 				$location.path('/Query/Recent').search($scope.params);
 		}
@@ -126,6 +154,11 @@ app.controller('QueryController', function($scope, $timeout, $location, $localSt
 			$scope.params.minutes = parseInt($scope.params.minutes) | '';
 		if($scope.params.skip)
 			$scope.params.skip = parseInt($scope.params.skip) | '';
+		
+		if($scope.params.chart) {
+			$scope.chart = $scope.params.chart;
+			delete $scope.params.chart;
+		}
 		
 		if($routeParams['sensors[]'].length > 0) {
 			$scope.error = false;

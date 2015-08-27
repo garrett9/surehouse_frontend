@@ -5,8 +5,17 @@
 app.constant('PERIODS', {
 	TODAY: 'T',
 	YESTERDAY: 'Y',
-	THIS_WEEK: 'W',
-	THIS_MONTH: 'M'
+	THIS_WEEK: 'TW',
+	LAST_WEEK: 'LW',
+	THIS_MONTH: 'TM',
+	LAST_MONTH: 'LM'
+});
+
+// The different types of charts to choose from
+app.constant('TYPES', {
+	BAR: 'bar',
+	LINE: 'line',
+	PIE: 'pie'
 });
 
 // The amount of time to wait before refreshing a chart.

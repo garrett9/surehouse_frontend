@@ -1,17 +1,17 @@
 <div
 	class="col-md-10 animated fadeIn alert alert-success top-general-alert"
 	role="alert" data-ng-show="status.delete_success">
-	<button class="close" data-dismiss="alert">&times;</button>
 	<strong>Successfully deleted the alert.</strong> <span
 		class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+	<button class="close" data-dismiss="alert">&times;</button>
 </div>
 <div
 	class="col-md-10 animated fadeIn alert alert-danger top-general-alert"
 	role="alert" data-ng-show="status.delete_error">
-	<button class="close" data-dismiss="alert">&times;</button>
 	<strong>Failed to delete the alert. Please contact support if
 		this problem persists.</strong> <span class="glyphicon glyphicon-thumbs-down"
 		aria-hidden="true"></span>
+	<button class="close" data-dismiss="alert">&times;</button>
 </div>
 
 <div class="col-md-10 content-wrapper">
@@ -21,7 +21,7 @@
 			<span data-ng-init="all()"></span>
 			<div class="widget filterable animated fadeIn">
 				<div class="widget-header">
-					Manage Alerts <span data-ng-if="alerts.length != 0" class="badge">{{alerts.length}}</span>
+					<h3>Manage Alerts <span data-ng-if="alerts.length != 0" class="badge">{{alerts.length}}</span></h3>
 					<div class="btn-group widget-header-toolbar">
 						<button class="btn btn-default btn-xs btn-filter">
 							<span class="glyphicon glyphicon-filter"></span> Filter
@@ -47,8 +47,6 @@
 										placeholder="Value" disabled></th>
 									<th><input type="text" class="form-control"
 										placeholder="Timespan (Minutes)" disabled></th>
-									<th><input type="text" class="form-control"
-										placeholder="Status" disabled></th>
 									<th></th>
 								</tr>
 							</thead>
@@ -62,7 +60,6 @@
 									<td>{{operationText(a.operation)}}</td>
 									<td>{{a.value}}</td>
 									<td>{{a.timespan}}</td>
-									<td>{{(a.active) ? 'Active' : 'Inactive'}}</td>
 									<td><button class="btn btn-xs btn-danger"
 											data-ng-click="destroy(a.id, $index)">Delete</button></td>
 								</tr>

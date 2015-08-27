@@ -8,6 +8,11 @@ app.factory('Alert', function(API) {
 			API.GET('/Alerts', success, error);
 		},
 		
+		// Get all active alerts
+		activated: function(success, error) {
+			API.GET('/Alerts/Activated', success, error);
+		},
+		
 		// Create a user.
 		create: function(data, success, error) {
 			API.POST('/Alerts/Create', data, success, error);
