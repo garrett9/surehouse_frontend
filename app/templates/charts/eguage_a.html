@@ -1,17 +1,15 @@
 <!-- main -->
-<div class="col-md-10 content-wrapper animated fadeIn">
+<div class="col-md-10 content-wrapper fadeIn" data-ng-class="{'animated': !focusOnWidget}">
 	<div class="content">
 		<div class="main-content">
-			<div class="widget">
+			<div class="widget" data-ng-class="{'widget-focus-enabled': focusOnWidget}">
 				<div class="widget-header">
 					<h3></h3>
 					<div class="btn-group widget-header-toolbar">
-						<a href="#" id="tour-focus" title="Focus"
-							class="btn-borderless btn-focus"><i class="fa fa-eye"></i></a> <a
-							href="#" title="Expand/Collapse"
-							class="btn-borderless btn-toggle-expand"></a><a href="#"
-							title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i
-							class="fa fa-chevron-up"></i></a>
+						<a href="" id="tour-focus" title="Focus"
+							data-ng-click="$root.focusOn=!$root.focusOn; focusOnWidget=!focusOnWidget"
+							class="btn-borderless btn-focus"><i
+							class="fa fa-eye{{(focusOnWidget) ? '-slash' : ''}}"></i></a>
 					</div>
 				</div>
 				<div class="widget-content">

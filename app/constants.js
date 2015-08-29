@@ -3,6 +3,8 @@
  */
 // The different time periods to query
 app.constant('PERIODS', {
+	HOUR: 'H',
+	LAST_HOUR: 'LH',
 	TODAY: 'T',
 	YESTERDAY: 'Y',
 	THIS_WEEK: 'TW',
@@ -19,4 +21,4 @@ app.constant('TYPES', {
 });
 
 // The amount of time to wait before refreshing a chart.
-app.constant('REFRESH', 1000 * 6000);
+app.constant('REFRESH', 1000 * 60);

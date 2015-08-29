@@ -77,7 +77,8 @@
 									<h3>
 										<span data-ng-if="chart.icon"> <i
 											class="{{chart.icon}}"></i>
-										</span> {{chart.title}} <span data-ng-if="!dontShowUnits && units" data-ng-bind="'(' + units + ')'"></span>
+										</span> {{chart.title}} <span data-ng-if="!dontShowUnits && units"
+											data-ng-bind="'(' + units + ')'"></span>
 									</h3>
 									<span data-ng-if="chart.description"> <em>-
 											{{chart.description}}</em>
@@ -103,6 +104,12 @@
 										<strong>Select period: </strong>
 										<ul id="sales-stat-tab">
 											<li
+												data-ng-class="{'active': $parent.period==$root.PERIODS.HOUR}"><a
+												href="" data-ng-click="$parent.period=$root.PERIODS.HOUR">This Hour</a></li>
+											<li
+												data-ng-class="{'active': $parent.period==$root.PERIODS.LAST_HOUR}"><a
+												href="" data-ng-click="$parent.period=$root.PERIODS.LAST_HOUR">Last Hour</a></li>
+											<li
 												data-ng-class="{'active': $parent.period==$root.PERIODS.TODAY}"><a
 												href="" data-ng-click="$parent.period=$root.PERIODS.TODAY">Today</a></li>
 											<li
@@ -120,12 +127,12 @@
 												data-ng-click="$parent.period=$root.PERIODS.LAST_WEEK">Last
 													Week</a></li>
 											<li
-												data-ng-class="{'active': period==$root.PERIODS.THIS_MONTH}"><a
+												data-ng-class="{'active': $parent.period==$root.PERIODS.THIS_MONTH}"><a
 												href=""
 												data-ng-click="$parent.period=$root.PERIODS.THIS_MONTH">This
 													Month</a></li>
 											<li
-												data-ng-class="{'active': period==$root.PERIODS.LAST_MONTH}"><a
+												data-ng-class="{'active': $parent.period==$root.PERIODS.LAST_MONTH}"><a
 												href=""
 												data-ng-click="$parent.period=$root.PERIODS.LAST_MONTH">Last
 													Month</a></li>

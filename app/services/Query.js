@@ -17,6 +17,10 @@ app.factory('Query', function(API, PERIODS) {
 		// Given a set of parameters, and a period to query for, this function adds the aggregate parameter to the existing set of parameters
 		addAggregate: function(params, period) {
 			switch(period) {
+				case PERIODS.HOUR:
+				case PERIODS.LAST_HOUR:
+					params.aggregate = 2;
+					break;
 				case PERIODS.TODAY:
 				case PERIODS.YESTERDAY:
 					params.aggregate = 1 * 60;
@@ -41,8 +45,21 @@ app.factory('Query', function(API, PERIODS) {
 				return parameters;
 			}
 
+			delete parameters.minutes;
+			delete parameters.skip;
 			// Depending on the type of period selected
 			switch(period) {
+				case PERIODS.HOUR:
+					// Add the number of minutes occured in the hour
+					return addParameters({
+						minutes: date.getMinutes()
+					});
+				case PERIODS.LAST_HOUR:
+					// Skip the number of minutes occurned in the hour, and then query the next hour
+					return addParameters({
+						skip: date.getMinutes(),
+						minutes: 60
+					});
 				case PERIODS.TODAY:
 					// Add the number of minutes that occured today
 					return addParameters({

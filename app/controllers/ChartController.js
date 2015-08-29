@@ -34,6 +34,7 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 
 		// Watch the period parameter in the scope to see if we need to go and query a new data set with a different timespan
 		$scope.$watch('period', function(newVal, oldVal) {
+			console.log(newVal);
 			// Only execute if the old value was originally an actual value, and has changed
 			if(oldVal && oldVal != newVal) {
 				options_initialized = false;

@@ -160,6 +160,8 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 		initLineChartOptions: function(units, period) {
 			var dateFormat;
 			switch(period) {
+				case PERIODS.HOUR:
+				case PERIODS.LAST_HOUR:
 				case PERIODS.TODAY:
 				case PERIODS.YESTERDAY:
 					dateFormat = "%H:%M";
@@ -170,6 +172,8 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					dateFormat = "%x";
 				break;
 			}
+			
+			dateFormat = '%x %I:%M %p';
 
 			return {
 				chart: {
