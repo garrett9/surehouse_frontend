@@ -24,7 +24,8 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 							if(isNaN(value))
 								value = 0;
 							var display_name = name.substr(0, name.indexOf('.'));
-							units = name.substr(name.indexOf('.') + 1, name.length);
+							if(units == null)
+								units = name.substr(name.indexOf('.') + 1, name.length);
 
 							if(!sensors[display_name])
 								sensors[display_name] = [];
@@ -53,11 +54,11 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 							var display_name = name.substr(0, name.indexOf('.'));
 							if(units == null)
 								units = name.substr(name.indexOf('.') + 1, name.length);
-							
+
 							var value = payload[i][name];
 							if(isNaN(value))
 								value = 0;
-							
+
 							values.push({
 								label: display_name,
 								value: value
@@ -74,11 +75,11 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 							var display_name = name.substr(0, name.indexOf('.'));
 							if(units == null)
 								units = name.substr(name.indexOf('.') + 1, name.length);
-							
+
 							var value = payload[i][name];
 							if(isNaN(value))
 								value = 0;
-							
+
 							data.push({
 								key: display_name,
 								y: value
@@ -89,12 +90,12 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 			}
 			return {data: data, units:units};
 		},
-		
+
 		// Performs a query given the parameters, and an optional time period. The function then formats the results from the API query to an angular-nv-d3 compatible data set, and then passes them along to the success callback
 		query: function(type, params, period, success, error) {
 			if(params['sensors[]'])
 				params.sensors = params['sensors[]'];
-			
+
 			if(type == 'line') {
 				if(period)
 					Query.addAggregate(params, period);
@@ -110,7 +111,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 				closure = Query.customPost;
 			else
 				closure = Query.recentPost;
-			
+
 			var self = this;
 			closure(params, function(res) {
 				results = self.formatData(type, res.payload);
@@ -126,7 +127,21 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					height: 500,
 					x: function(d){return d.key;},
 					y: function(d){return d.y;},
+
 					showLabels: false,
+
+					tooltip: {
+						contentGenerator: function(data) {
+							var display_units = (units) ? units : '';
+							
+							var string = '<table>';
+							string += '<tr><td><div class="small-box" style="background-color:' + data.color + ';"></div> ' + data.data.key + '</td>';
+							string += '<td aligh="right"><strong>' + data.data.y + ' ' + display_units + '</strong></td></tr>';
+							string += '</table>';
+							return string;
+						},
+					},
+
 					transitionDuration: 500,
 					labelThreshold: 0.01,
 					legend: {
@@ -173,6 +188,22 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					transitionDuration: 300,
 					useInteractiveGuideline: true,
 					clipVoronoi: false,
+					
+					callback: function(chart) {
+						chart.interactiveLayer.tooltip.contentGenerator(function(data) {
+							var display_units = (units) ? units : '';
+							
+							var string = '<table>';
+							string += '<tr><td><strong>' + data.value + '</strong></td><td></td></tr>';
+							for(var i in data.series) {
+								string += '<tr><td><div class="small-box" style="background-color:' + data.series[i].color + ';"></div> ' + data.series[i].key + '</td>';
+								string += '<td align="right"><strong>' + data.series[i].value + ' ' + display_units + '</strong></td></tr>'; 
+							}
+							string += '</table>';
+							return string;
+						});
+						return chart;
+					},
 
 					xAxis: {
 						axisLabel: 'Time',
@@ -206,6 +237,19 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					x: function(d){return d.label; },
 					y: function(d){return d.value; },
 					showValues: true,
+					
+					tooltip: {
+						contentGenerator: function(data) {
+							var display_units = (units) ? units : '';
+
+							var string = '<table>';
+							string += '<tr><td><div class="small-box" style="background-color:' + data.color + ';"></div> ' + data.data.label + '</td>';
+							string += '<td aligh="right"><strong>' + data.data.value + ' ' + display_units + '</strong></td></tr>';
+							string += '</table>';
+							return string;
+						},
+					},
+					
 					valueFormat: function(d){
 						return d3.format(',.1f')(d);
 					},

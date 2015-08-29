@@ -44,7 +44,7 @@
 							</thead>
 							<tbody>
 								<tr ts-repeat data-ng-repeat="p in payload">
-									<td data-ng-if="params.aggregate > 0">{{ p['Time'] }}</td>
+									<td data-ng-if="params.aggregate > 0">{{ p.Time | date:'short'}}</td>
 									<td
 										data-ng-repeat="(key, value) in p | orderBy:sortType:sortReverse"
 										data-ng-if="key != 'Time'">{{ value }}</td>

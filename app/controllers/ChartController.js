@@ -6,6 +6,14 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 	var beforeRender;
 	var options_initialized = false;
 
+	$scope.toolTipContentFunction = function(){
+		return function(key, x, y, e, graph) {
+	    	return  'Super New Tooltip' +
+	        	'<h1>' + key + '</h1>' +
+	            '<p>' +  y + ' at ' + x + '</p>'
+		}
+	}
+	
 	// Load pre-existing data into a chart
 	$scope.loadData = function(type, data) {
 		$scope.type = type; 
@@ -45,6 +53,7 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 
 	// Sets the options for the chart based on the provided type of chart
 	var setOptions = function(units) {
+		$scope.units = units;
 		switch($scope.type) {
 			case TYPES.LINE:
 				$scope.options = Charter.initLineChartOptions(units, $scope.period);
@@ -67,7 +76,7 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 					$scope.updated = new Date();
 
 					if(!options_initialized) {
-						setOptions();
+						setOptions(units);
 						options_initialized = true;
 					}
 				}
