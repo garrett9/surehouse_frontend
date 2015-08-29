@@ -77,8 +77,7 @@
 									<h3>
 										<span data-ng-if="chart.icon"> <i
 											class="{{chart.icon}}"></i>
-										</span> {{chart.title}} <span data-ng-if="!dontShowUnits && units"
-											data-ng-bind="'(' + units + ')'"></span>
+										</span>
 									</h3>
 									<span data-ng-if="chart.description"> <em>-
 											{{chart.description}}</em>
@@ -99,7 +98,7 @@
 									</div>
 								</div>
 								<div class="widget-content" data-ng-show="!collapse"
-									data-ng-init="init(chart.type, chart.params, chart.period, chart.beforeRender)">
+									data-ng-init="init(chart.type, chart.params, chart.period, chart.beforeRender, chart.dontShowAverages)">
 									<div data-ng-if="!chart.dontShowPeriods" class="chart-nav">
 										<strong>Select period: </strong>
 										<ul id="sales-stat-tab">

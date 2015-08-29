@@ -5,6 +5,7 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 	var params;
 	var beforeRender;
 	var options_initialized = false;
+	var dontShowAverages;
 
 	$scope.toolTipContentFunction = function(){
 		return function(key, x, y, e, graph) {
@@ -23,18 +24,18 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 	}
 
 	// Initializes the controller with the 
-	$scope.init = function(chart_type, initialization_params, period, beforeRenderClosure) {
+	$scope.init = function(chart_type, initialization_params, period, beforeRenderClosure, dontShowAveragesIn) {
 		$scope.type = chart_type;
 		params = initialization_params;
 		$scope.period = (period) ? period : PERIODS.TODAY;
 		beforeRender = beforeRenderClosure;
-
+		dontShowAverages = dontShowAveragesIn;
+		
 		// Make the first request to get data
 		$scope.getData();
 
 		// Watch the period parameter in the scope to see if we need to go and query a new data set with a different timespan
 		$scope.$watch('period', function(newVal, oldVal) {
-			console.log(newVal);
 			// Only execute if the old value was originally an actual value, and has changed
 			if(oldVal && oldVal != newVal) {
 				options_initialized = false;
@@ -53,11 +54,11 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 	}
 
 	// Sets the options for the chart based on the provided type of chart
-	var setOptions = function(units) {
+	var setOptions = function(units, averages) {
 		$scope.units = units;
 		switch($scope.type) {
 			case TYPES.LINE:
-				$scope.options = Charter.initLineChartOptions(units, $scope.period);
+				$scope.options = Charter.initLineChartOptions(units, $scope.period, averages);
 				break;
 			case TYPES.BAR:
 				$scope.options = Charter.initDiscreteBarGraphOptions(units, $scope.period);
@@ -71,13 +72,16 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 	// Retrieve the data to display in the chart
 	$scope.getData = function() {
 		if($scope.period) {
-			Charter.query($scope.type, params, $scope.period, function(data, units) {
+			Charter.query($scope.type, params, $scope.period, function(data, units, averages) {
 				var promise = function(data) {
 					$scope.data = data;
 					$scope.updated = new Date();
 
 					if(!options_initialized) {
-						setOptions(units);
+						if(!dontShowAverages)
+							setOptions(units, averages);
+						else
+							setOptions(units);
 						options_initialized = true;
 					}
 				}

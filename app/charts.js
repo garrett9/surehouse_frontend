@@ -33,6 +33,7 @@ var beforeRender = function(config) {
 app.constant('CHARTS', [
 	[{
 		title: 'Temperature',
+		dontShowAverages: true,
 		type: 'line',
 		description: 'Living temperature.',
 		icon: 'wi wi-thermometer',

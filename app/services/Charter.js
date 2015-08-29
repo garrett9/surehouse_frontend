@@ -8,11 +8,12 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 		// Format a data set retrieved from the APU
 		formatData: function(type, payload) {
 			var data = [];
-			var averages = {};
-			var units = null;
+			var averages = null;
+			var units = {};
 			switch(type) {
 				case TYPES.LINE: // Build the data needed for a line graph
 					var sensors = {};
+					averages = {};
 					for(var i in payload) {
 						var timestamp = payload[i]['Time'];
 
@@ -24,8 +25,9 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 							if(isNaN(value))
 								value = 0;
 							var display_name = name.substr(0, name.indexOf('.'));
-							if(units == null)
-								units = name.substr(name.indexOf('.') + 1, name.length);
+
+							if(!units[display_name])
+								units[display_name] = name.substr(name.indexOf('.') + 1, name.length);
 
 							if(!sensors[display_name])
 								sensors[display_name] = [];
@@ -40,20 +42,22 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 							averages[display_name] += value;
 						}
 					}
-					for(var name in sensors) 
+					
+					for(var name in sensors) {
+						averages[name] = Math.round((averages[name]/sensors[name].length) * 10) / 10;
 						data.push({
 							key: name, 
 							values:sensors[name], 
-							average:averages[name]/sensors[name].length
 						});
+					}
 					break;
 				case TYPES.BAR: // Build the data needed for a bar graph
 					var values = [];
 					for(var i in payload) {
 						for(var name in payload[i]) {
 							var display_name = name.substr(0, name.indexOf('.'));
-							if(units == null)
-								units = name.substr(name.indexOf('.') + 1, name.length);
+							if(!units[display_name])
+								units[display_name] = name.substr(name.indexOf('.') + 1, name.length);
 
 							var value = payload[i][name];
 							if(isNaN(value))
@@ -73,8 +77,8 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					for(var i in payload) {
 						for(var name in payload[i]) {
 							var display_name = name.substr(0, name.indexOf('.'));
-							if(units == null)
-								units = name.substr(name.indexOf('.') + 1, name.length);
+							if(!units[display_name])
+								units[display_name] = name.substr(name.indexOf('.') + 1, name.length);
 
 							var value = payload[i][name];
 							if(isNaN(value))
@@ -88,7 +92,16 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					}
 					break;
 			}
-			return {data: data, units:units};
+			
+			var results = {
+				data: data,
+				units: units
+			}
+			
+			if(averages)
+				results.averages = averages;
+			
+			return results;
 		},
 
 		// Performs a query given the parameters, and an optional time period. The function then formats the results from the API query to an angular-nv-d3 compatible data set, and then passes them along to the success callback
@@ -115,7 +128,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 			var self = this;
 			closure(params, function(res) {
 				results = self.formatData(type, res.payload);
-				success(results.data, results.units)}
+				success(results.data, results.units, results.averages)}
 			, error);
 		},
 
@@ -132,7 +145,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 
 					tooltip: {
 						contentGenerator: function(data) {
-							var display_units = (units) ? units : '';
+							var display_units = (units[data.data.key]) ? units[data.data.key] : '';
 							
 							var string = '<table>';
 							string += '<tr><td><div class="small-box" style="background-color:' + data.color + ';"></div> ' + data.data.key + '</td>';
@@ -157,7 +170,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 		},
 
 //		Initializes the options for a Cumulative line chart
-		initLineChartOptions: function(units, period) {
+		initLineChartOptions: function(units, period, averages) {
 			var dateFormat;
 			switch(period) {
 				case PERIODS.HOUR:
@@ -195,13 +208,23 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					
 					callback: function(chart) {
 						chart.interactiveLayer.tooltip.contentGenerator(function(data) {
-							var display_units = (units) ? units : '';
-							
 							var string = '<table>';
 							string += '<tr><td><strong>' + data.value + '</strong></td><td></td></tr>';
 							for(var i in data.series) {
 								string += '<tr><td><div class="small-box" style="background-color:' + data.series[i].color + ';"></div> ' + data.series[i].key + '</td>';
-								string += '<td align="right"><strong>' + data.series[i].value + ' ' + display_units + '</strong></td></tr>'; 
+
+								var display_units = (units[data.series[i].key]) ? units[data.series[i].key] : '';
+								
+								if(averages && averages[data.series[i].key]) {
+									string += '<td>Average:</td>';
+									string += '<td align="right"><strong>' + averages[data.series[i].key] + ' ' + display_units + '</strong></td>';
+									string += '<td>Value:</td>';
+								}
+
+								string += '<td align="right"><strong>' + data.series[i].value + ' ' + display_units + '</strong></td>';
+								
+
+								string += '</tr>'; 
 							}
 							string += '</table>';
 							return string;
@@ -244,7 +267,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					
 					tooltip: {
 						contentGenerator: function(data) {
-							var display_units = (units) ? units : '';
+							var display_units = (units[data.data.label]) ? units[data.data.label] : '';
 
 							var string = '<table>';
 							string += '<tr><td><div class="small-box" style="background-color:' + data.color + ';"></div> ' + data.data.label + '</td>';
