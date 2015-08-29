@@ -1,0 +1,80 @@
+<div data-ng-repeat="(j, chart) in row">
+	<div class="col-md-{{chart.size}}">
+		<div class="widget"
+			data-ng-class="{'widget-focus-enabled': focusOnWidget}"
+			data-ng-controller="ChartController">
+			<div class="widget-header">
+				<h3>
+					<span data-ng-if="chart.icon"> <i class="{{chart.icon}}"></i>
+					</span>
+				</h3>
+				<span data-ng-if="chart.description"> <em>-
+						{{chart.description}}</em>
+				</span>
+				<div data-ng-if="!chart.dontShowToolbar"
+					class="btn-group widget-header-toolbar">
+					<span class="label label-success" data-ng-show="updated">Last
+						Updated: <strong>{{updated | date:'shortTime'}}</strong>
+					</span><a href="" id="tour-focus" title="Focus"
+						data-ng-click="$root.focusOn=!$root.focusOn; $parent.focusOnWidget=!$parent.focusOnWidget"
+						class="btn-borderless btn-focus"><i
+						class="fa fa-eye{{($parent.focusOnWidget) ? '-slash' : ''}}"></i></a>
+					<a href="" title="Expand/Collapse"
+						data-ng-init="$parent.collapse=false"
+						data-ng-click="$parent.collapse=!$parent.collapse"
+						class="btn-borderless btn-toggle-expand"><i
+						class="fa fa-chevron-{{($parent.collapse) ? 'down' : 'up'}}"></i></a>
+				</div>
+			</div>
+			<div class="widget-content" data-ng-show="!collapse"
+				data-ng-init="init(chart.type, chart.params, chart.period, chart.beforeRender, chart.dontShowAverages)">
+				<div data-ng-if="!chart.dontShowPeriods" class="chart-nav">
+					<strong>Select period: </strong>
+					<ul id="sales-stat-tab">
+						<li data-ng-class="{'active': $parent.period==$root.PERIODS.HOUR}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.HOUR">This
+								Hour</a></li>
+						<li
+							data-ng-class="{'active': $parent.period==$root.PERIODS.LAST_HOUR}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.LAST_HOUR">Last
+								Hour</a></li>
+						<li
+							data-ng-class="{'active': $parent.period==$root.PERIODS.TODAY}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.TODAY">Today</a></li>
+						<li
+							data-ng-class="{'active': $parent.period==$root.PERIODS.YESTERDAY}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.YESTERDAY">Yesterday</a></li>
+						<li
+							data-ng-class="{'active': $parent.period==$root.PERIODS.THIS_WEEK}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.THIS_WEEK">This
+								Week</a></li>
+						<li
+							data-ng-class="{'active': $parent.period==$root.PERIODS.LAST_WEEK}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.LAST_WEEK">Last
+								Week</a></li>
+						<li
+							data-ng-class="{'active': $parent.period==$root.PERIODS.THIS_MONTH}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.THIS_MONTH">This
+								Month</a></li>
+						<li
+							data-ng-class="{'active': $parent.period==$root.PERIODS.LAST_MONTH}"><a
+							href="" data-ng-click="$parent.period=$root.PERIODS.LAST_MONTH">Last
+								Month</a></li>
+					</ul>
+				</div>
+				<div class="chart-nav" data-ng-if="chart.allowTypeSelection">
+					<strong>Select Chart Type: </strong>
+					<ul id="sales-stat-tab">
+						<li data-ng-class="{'active': $parent.type==$root.TYPES.PIE}"><a
+							href="" data-ng-click="$parent.type=$root.TYPES.PIE">Pie</a></li>
+						<li data-ng-class="{'active': $parent.type==$root.TYPES.LINE}"><a
+							href="" data-ng-click="$parent.type=$root.TYPES.LINE">Line</a></li>
+						<li data-ng-class="{'active': $parent.type==$root.TYPES.BAR}"><a
+							href="" data-ng-click="$parent.type=$root.TYPES.BAR">Bar</a></li>
+					</ul>
+				</div>
+				<nvd3 options="options" data="data"></nvd3>
+			</div>
+		</div>
+	</div>
+</div>
