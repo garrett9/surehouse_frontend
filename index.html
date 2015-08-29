@@ -49,10 +49,36 @@
 					<!-- end logo -->
 					<div class="col-md-10">
 						<div class="row">
-							<div class="col-md-5">
+							<div class="col-md-2">
+
+
+								<!-- search box -->
+								<div class="input-group searchbox style="width:100%;">
+									<input type="search" class="form-control"
+										placeholder="Search for a widget..."> <span
+										class="input-group-btn">
+										<button class="btn btn-default" type="button">
+											<i class="fa fa-search"></i>
+										</button>
+									</span>
+								</div>
+
+							</div>
+							
+							<div class="col-xs-4">
+								<div class="top-bar-right">
+									<!-- responsive menu bar icon -->
+									<a href="" class="hidden-md hidden-lg main-nav-toggle"><i
+										class="fa fa-bars"></i></a>
+									<!-- end responsive menu bar icon -->
+								</div>
+							</div>
+
+							<div class="col-xs-8">
+
 								<div
 									data-ng-show="$root.activatedAlerts && $root.activatedAlerts.length > 0"></div>
-								<div class="notifications">
+								<div class="notifications" style="margin-top:5px;">
 									<ul>
 										<!-- notification: general -->
 										<li class="notification-item general">
@@ -82,27 +108,9 @@
 									</ul>
 								</div>
 
-								<!-- search box -->
-								<div class="input-group searchbox">
-									<input type="search" class="form-control"
-										placeholder="Search for a widget..."> <span
-										class="input-group-btn">
-										<button class="btn btn-default" type="button">
-											<i class="fa fa-search"></i>
-										</button>
-									</span>
-								</div>
-
 							</div>
 							<!-- end search box -->
-							<div class="col-md-7">
-								<div class="top-bar-right">
-									<!-- responsive menu bar icon -->
-									<a href="" class="hidden-md hidden-lg main-nav-toggle"><i
-										class="fa fa-bars"></i></a>
-									<!-- end responsive menu bar icon -->
-								</div>
-							</div>
+							
 						</div>
 						<!-- /row -->
 					</div>
