@@ -17,7 +17,8 @@ app.constant('PERIODS', {
 app.constant('TYPES', {
 	BAR: 'bar',
 	LINE: 'line',
-	PIE: 'pie'
+	PIE: 'pie',
+	MULTI: 'multi'
 });
 
 // The amount of time to wait before refreshing a chart.

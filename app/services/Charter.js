@@ -42,7 +42,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 							averages[display_name] += value;
 						}
 					}
-					
+
 					for(var name in sensors) {
 						averages[name] = Math.round((averages[name]/sensors[name].length) * 10) / 10;
 						data.push({
@@ -91,16 +91,71 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 						}
 					}
 					break;
+				case TYPES.MULTI: // Build the data needed for a multi chart
+					var sensors = {};
+					averages = {};
+					var firstUnits = null;
+					for(var i in payload) {
+						var timestamp = payload[i]['Time'];
+
+						for(var name in payload[i]) {
+							if(name == 'Time')
+								continue;
+
+							var value = payload[i][name];
+							if(isNaN(value))
+								value = 0;
+							var display_name = name.substr(0, name.indexOf('.'));
+
+							var units_display = name.substr(name.indexOf('.') + 1, name.length);
+							units[display_name] = units_display;
+							if(!firstUnits)
+								firstUnits = units_display;
+
+							if(!sensors[display_name]) {
+								sensors[display_name] = {};
+								sensors[display_name].values = [];
+							}
+							sensors[display_name].original_name = name;
+
+							
+							var values = [];
+							values.x = timestamp;
+							values.y = value;
+							sensors[display_name].values.push(values);
+
+							if(!averages[display_name])
+								averages[display_name] = 0;
+							averages[display_name] += value;
+						}
+					}
+
+
+					for(var name in sensors) {
+						averages[name] = Math.round((averages[name]/sensors[name].length) * 10) / 10;
+
+						var axis = 1;
+						if(units[name] != firstUnits)
+							axis = 2;
+						
+						data.push({
+							key: name, 
+							values:sensors[name].values, 
+							type: 'line',
+							yAxis: axis
+						});
+					}
+					break;
 			}
-			
+
 			var results = {
-				data: data,
-				units: units
+					data: data,
+					units: units
 			}
-			
+
 			if(averages)
 				results.averages = averages;
-			
+
 			return results;
 		},
 
@@ -108,8 +163,8 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 		query: function(type, params, period, success, error) {
 			if(params['sensors[]'])
 				params.sensors = params['sensors[]'];
-
-			if(type == 'line') {
+			
+			if(type == TYPES.LINE || type == TYPES.MULTI) {
 				if(period)
 					Query.addAggregate(params, period);
 			}
@@ -128,8 +183,8 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 			var self = this;
 			closure(params, function(res) {
 				results = self.formatData(type, res.payload);
-				success(results.data, results.units, results.averages)}
-			, error);
+				success(results.data, results.units, results.averages)
+			}, error);
 		},
 
 		// Initializes the options for a Pie chart and returns them
@@ -146,7 +201,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					tooltip: {
 						contentGenerator: function(data) {
 							var display_units = (units[data.data.key]) ? units[data.data.key] : '';
-							
+
 							var string = '<table>';
 							string += '<tr><td><div class="small-box" style="background-color:' + data.color + ';"></div> ' + data.data.key + '</td>';
 							string += '<td aligh="right"><strong>' + data.data.y + ' ' + display_units + '</strong></td></tr>';
@@ -169,24 +224,71 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 			};
 		},
 
-//		Initializes the options for a Cumulative line chart
+		// Initializes the options for a multi line chart
+		initMultiChartOptions: function(units, period, averages) {
+			var dateFormat = '%x %I:%M %p';
+
+			return {
+				chart: {
+	                type: 'multiChart',
+	                height: 450,
+	                margin : {
+	                    top: 30,
+	                    right: 60,
+	                    bottom: 50,
+	                    left: 70
+	                },
+	                color: d3.scale.category10().range(),
+	                useInteractiveGuideline: true,
+	                transitionDuration: 500,
+	                
+	                tooltip: {
+						contentGenerator: function(data) {
+							var date = new Date(data.series[0].value);
+							var half = 'AM';
+							var hours = date.getHours();
+							if(hours >= 12) {
+								hours -= 12;
+								half = 'PM';
+							}
+							
+							var minutes = date.getMinutes();
+							if(minutes < 10)
+								minutes = '0' + minutes;
+							
+							date = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + hours + ':' + minutes + ' ' + half;
+							var string = '<table>';
+							string += '<tr><td><strong>' + date + '</strong></td><td></td></tr>';
+							string += '<tr><td><div class="small-box" style="background-color:' + data.series[0].color + ';"></div>' + data.series[0].value + '</td></tr>';
+							string += '</table>';
+							
+							return string;
+						}
+					},
+	                
+	                xAxis: {
+	                	axisLabel: 'Time',
+	                    tickFormat: function(d){
+	                    	return d3.time.format(dateFormat)(new Date(d))
+	                    }
+	                },
+	                yAxis1: {
+	                    tickFormat: function(d){
+	                        return d3.format(',.1f')(d);
+	                    }
+	                },
+	                yAxis2: {
+	                    tickFormat: function(d){
+	                        return d3.format(',.1f')(d);
+	                    }
+	                }
+	            }
+			};
+		},
+
+		// Initializes the options for a Cumulative line chart
 		initLineChartOptions: function(units, period, averages) {
-			var dateFormat;
-			switch(period) {
-				case PERIODS.HOUR:
-				case PERIODS.LAST_HOUR:
-				case PERIODS.TODAY:
-				case PERIODS.YESTERDAY:
-					dateFormat = "%H:%M";
-					break;
-				case PERIODS.THIS_WEEK:
-				case PERIODS.THIS_MONTH:
-				default:
-					dateFormat = "%x";
-				break;
-			}
-			
-			dateFormat = '%x %I:%M %p';
+			var dateFormat = '%x %I:%M %p';
 
 			return {
 				chart: {
@@ -205,7 +307,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					transitionDuration: 300,
 					useInteractiveGuideline: true,
 					clipVoronoi: false,
-					
+
 					callback: function(chart) {
 						chart.interactiveLayer.tooltip.contentGenerator(function(data) {
 							var string = '<table>';
@@ -214,7 +316,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 								string += '<tr><td><div class="small-box" style="background-color:' + data.series[i].color + ';"></div> ' + data.series[i].key + '</td>';
 
 								var display_units = (units[data.series[i].key]) ? units[data.series[i].key] : '';
-								
+
 								if(averages && averages[data.series[i].key]) {
 									string += '<td>Average:</td>';
 									string += '<td align="right"><strong>' + averages[data.series[i].key] + ' ' + display_units + '</strong></td>';
@@ -222,7 +324,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 								}
 
 								string += '<td align="right"><strong>' + data.series[i].value + ' ' + display_units + '</strong></td>';
-								
+
 
 								string += '</tr>'; 
 							}
@@ -264,7 +366,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 					x: function(d){return d.label; },
 					y: function(d){return d.value; },
 					showValues: true,
-					
+
 					tooltip: {
 						contentGenerator: function(data) {
 							var display_units = (units[data.data.label]) ? units[data.data.label] : '';
@@ -276,7 +378,7 @@ app.factory('Charter', function(Query, PERIODS, TYPES) {
 							return string;
 						},
 					},
-					
+
 					valueFormat: function(d){
 						return d3.format(',.1f')(d);
 					},

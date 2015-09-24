@@ -9,18 +9,18 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 
 	$scope.toolTipContentFunction = function(){
 		return function(key, x, y, e, graph) {
-	    	return  'Super New Tooltip' +
-	        	'<h1>' + key + '</h1>' +
-	            '<p>' +  y + ' at ' + x + '</p>'
+			return  'Super New Tooltip' +
+			'<h1>' + key + '</h1>' +
+			'<p>' +  y + ' at ' + x + '</p>'
 		}
 	}
-	
+
 	// Load pre-existing data into a chart
 	$scope.loadData = function(type, data) {
 		$scope.type = type; 
 		var results = Charter.formatData($scope.type, data);
 		$scope.data = results.data;
-	    setOptions(results.units);
+		setOptions(results.units);
 	}
 
 	// Initializes the controller with the 
@@ -30,7 +30,7 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 		$scope.period = (period) ? period : PERIODS.TODAY;
 		beforeRender = beforeRenderClosure;
 		dontShowAverages = dontShowAveragesIn;
-		
+
 		// Make the first request to get data
 		$scope.getData();
 
@@ -66,6 +66,8 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 			case TYPES.PIE:
 				$scope.options = Charter.initPieChartOptions(units, $scope.period);
 				break;
+			case TYPES.MULTI:
+				$scope.options = Charter.initMultiChartOptions(units, $scope.period);
 		}
 	};
 
@@ -103,5 +105,9 @@ app.controller('ChartController', function($scope, $interval, Charter, Query, RE
 	}
 
 	// Request for new data every minute
-	$interval($scope.getData, REFRESH);
+	var intervalPromise = $interval($scope.getData, REFRESH);
+
+	$scope.$on('$destroy', function () { 
+		$interval.cancel(intervalPromise); 
+	});
 });

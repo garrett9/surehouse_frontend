@@ -33,7 +33,6 @@ var beforeRender = function(config) {
 app.constant('CHARTS', [
 	[{
 		title: 'Temperature',
-		dontShowAverages: true,
 		type: 'line',
 		description: 'Living temperature.',
 		icon: 'wi wi-thermometer',
@@ -85,7 +84,7 @@ app.constant('CHARTS', [
 		type: 'bar',
 		icon: 'fa fa-bar-chart',
 		size: 6,
-		period: 'T',
+		period: 'TM',
 		params: {
 			sensors: ['CT_ACCU', 'CT_AHU', 'CT_ERV'],
 			absolute: 'true'
@@ -99,12 +98,22 @@ app.constant('CHARTS', [
 		type: 'bar',
 		icon: 'fa fa-bar-chart',
 		size: 6,
-		period: 'T',
+		period: 'TM',
 		params: {
 			sensors: ['CT_DHW'],
 			absolute: 'true'
 		},
 		dontShowPeriods: true,
 		beforeRender: beforeRender
-	}]
+	}, 
+	
+	/*{
+		title: 'Multi-Chart Test',
+		type: 'multi',
+		size: 6,
+		period: 'TM',
+		params: {
+			sensors: ['T_LIVING', 'RH_LIVING']
+		}
+	}*/]
 ]);
